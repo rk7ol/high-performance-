@@ -37,3 +37,21 @@ struct arr
     //5——ahead
     int direc[6];
 };
+
+//send table
+struct cube_temp
+{
+    int index;
+    double temp;
+};
+
+struct send_table
+{
+    //process index
+    int pro_t;
+    cube_temp* infor;
+};
+
+
+
+//hash table of index-temparature
