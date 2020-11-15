@@ -7,6 +7,13 @@
 **
 */
 
+
+#ifndef _UTIL_H
+#define _UTIL_H
+
+typedef struct cube cube;
+typedef struct cube_temp cube_temp;
+
 //Discrete cube
 struct cube
 {
@@ -55,3 +62,6 @@ struct send_table
 
 
 //hash table of index-temparature
+
+
+#endif
