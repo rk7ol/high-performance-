@@ -8,7 +8,7 @@ OBJDIR = out
 TARGETDIR = target
 
 
-OBJS = main.o cLinkedList.o cHashMap.o 
+OBJS = main.o cLinkedList.o cHashMap.o cArrayList.o
 TARGET = HP
 OBJOUT = $(patsubst %,$(OBJDIR)/%,$(OBJS))
 

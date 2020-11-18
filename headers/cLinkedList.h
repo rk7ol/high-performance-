@@ -9,22 +9,22 @@
 #define _CLINKEDLIST_H_
 
 /**
- * @brief store element by node, create list by cLinkedList_create(int nodeSize, int (*searchMethod)(const void* key, const void* content))
+ * @brief store element by node, create list by LinkedList_create(int nodeSize, int (*searchMethod)(const void* key, const void* content))
  * 
  */
-typedef struct cLinkedList LinkedList;
+typedef struct LinkedList LinkedList;
 
 /**
- * @brief linked list node, create node by cLinkedListNode_create(const void* content)
+ * @brief linked list node, create node by LinkedListNode_create(const void* content)
  * 
  */
-typedef struct cLinkedListNode LinkedListNode;
+typedef struct LinkedListNode LinkedListNode;
 
 /**
  * @brief linked list node
  * 
  */
-struct cLinkedListNode
+struct LinkedListNode
 {
 
     char *content;
@@ -38,7 +38,7 @@ struct cLinkedListNode
  * @brief linked list
  * 
  */
-struct cLinkedList
+struct LinkedList
 {
 
     LinkedListNode *headNode;
@@ -56,25 +56,25 @@ struct cLinkedList
  * 
  * @param nodeSize 
  * @param searchMethod 
- * @return cLinkedList 
+ * @return LinkedList 
  */
-extern LinkedList cLinkedList_create(int (*comparter)(const void *contentA, const void *contentB));
+extern LinkedList LinkedList_create(int (*comparter)(const void *contentA, const void *contentB));
 
 /**
  * @brief create linked list node
  * 
  * @param content 
- * @return cLinkedListNode 
+ * @return LinkedListNode 
  */
-extern LinkedListNode* cLinkedListNode_create(const void *content);
+extern LinkedListNode* LinkedListNode_create(const void *content);
 
 /**
  * @brief search node by content
  * 
  * @param content 
- * @return cLinkedListNode* 
+ * @return LinkedListNode* 
  */
-extern LinkedListNode *cLinkedList_search(const LinkedList *linkedList, const void *content);
+extern LinkedListNode *LinkedList_search(const LinkedList *linkedList, const void *content);
 
 /**
  * @brief add a node with content to the end of the linkedList
@@ -82,7 +82,7 @@ extern LinkedListNode *cLinkedList_search(const LinkedList *linkedList, const vo
  * @param linkedList 
  * @param content 
  */
-extern void cLinkedList_add(LinkedList *linkedList, const void *content);
+extern void LinkedList_add(LinkedList *linkedList, const void *content);
 
 /**
  * @brief remove node by content
@@ -90,7 +90,7 @@ extern void cLinkedList_add(LinkedList *linkedList, const void *content);
  * @param linkedList 
  * @param content 
  */
-extern void cLinkedList_removeByContent(LinkedList *linkedList, const void *content);
+extern void LinkedList_removeByContent(LinkedList *linkedList, const void *content);
 
 /**
  * @brief repalce node by content
@@ -99,20 +99,20 @@ extern void cLinkedList_removeByContent(LinkedList *linkedList, const void *cont
  * @param newContent 
  * @param oldContent 
  */
-extern void cLinkedList_replaceByContent(LinkedList *linkedList, const void *newContent, const void *oldContent);
+extern void LinkedList_replaceByContent(LinkedList *linkedList, const void *newContent, const void *oldContent);
 
 /**
  * @brief free list
  * 
  * @param linkedList 
  */
-extern void cLinkedList_destroy(LinkedList *linkedList);
+extern void LinkedList_destroy(LinkedList *linkedList);
 
 /**
  * @brief free list node
  * 
  * @param linkedListNode 
  */
-extern void cLinkedListNode_destroy(LinkedListNode *linkedListNode);
+extern void LinkedListNode_destroy(LinkedListNode *linkedListNode);
 
 #endif

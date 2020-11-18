@@ -1,6 +1,6 @@
 #include "cLinkedList.h"
 
-LinkedList cLinkedList_create(int (*comparter)(const void* content_A, const void *content_B))
+LinkedList LinkedList_create(int (*comparter)(const void* content_A, const void *content_B))
 {
 
     LinkedList linkedList = {
@@ -12,7 +12,7 @@ LinkedList cLinkedList_create(int (*comparter)(const void* content_A, const void
     return linkedList;
 }
 
-LinkedListNode* cLinkedListNode_create(const void *content)
+LinkedListNode* LinkedListNode_create(const void *content)
 {
 
     LinkedListNode *linkedListNode = malloc(sizeof(LinkedListNode));
@@ -27,7 +27,7 @@ LinkedListNode* cLinkedListNode_create(const void *content)
     return linkedListNode;
 }
 
-LinkedListNode *cLinkedList_search(const LinkedList *linkedList, const void *key)
+LinkedListNode *LinkedList_search(const LinkedList *linkedList, const void *key)
 {
 
     if (linkedList->headNode == NULL)
@@ -59,10 +59,10 @@ LinkedListNode *cLinkedList_search(const LinkedList *linkedList, const void *key
     return NULL;
 }
 
-void cLinkedList_add(LinkedList *linkedList, const void *content)
+void LinkedList_add(LinkedList *linkedList, const void *content)
 {
 
-    LinkedListNode* node = cLinkedListNode_create(content);
+    LinkedListNode* node = LinkedListNode_create(content);
     if (linkedList->size == 0)
     {
         linkedList->headNode = node;
@@ -82,9 +82,9 @@ void cLinkedList_add(LinkedList *linkedList, const void *content)
     linkedList->size = linkedList->size + 1;
 }
 
-void cLinkedList_removeByContent(LinkedList *linkedList, const void *key)
+void LinkedList_removeByContent(LinkedList *linkedList, const void *key)
 {
-    LinkedListNode *node = cLinkedList_search(linkedList, key);
+    LinkedListNode *node = LinkedList_search(linkedList, key);
 
     if (node != NULL)
     {
@@ -102,16 +102,16 @@ void cLinkedList_removeByContent(LinkedList *linkedList, const void *key)
         //remove from list
         node->previous->next = node->next;
 
-        cLinkedListNode_destroy(node);
+        LinkedListNode_destroy(node);
 
         linkedList->size--;
     }
 }
 
-void cLinkedList_replaceByContent(LinkedList *linkedList, const void *key, const void *content)
+void LinkedList_replaceByContent(LinkedList *linkedList, const void *key, const void *content)
 {
 
-    LinkedListNode *node = cLinkedList_search(linkedList, key);
+    LinkedListNode *node = LinkedList_search(linkedList, key);
 
     if (node != NULL)
     {
@@ -123,7 +123,7 @@ void cLinkedList_replaceByContent(LinkedList *linkedList, const void *key, const
     }
 }
 
-void cLinkedList_destroy(LinkedList *linkedList)
+void LinkedList_destroy(LinkedList *linkedList)
 {
 
     LinkedListNode *node = linkedList->headNode;
@@ -133,12 +133,12 @@ void cLinkedList_destroy(LinkedList *linkedList)
     while (node != NULL)
     {
         nextNode = node->next;
-        cLinkedListNode_destroy(node);
+        LinkedListNode_destroy(node);
         node = nextNode;
     }
 }
 
-void cLinkedListNode_destroy(LinkedListNode *linkedListNode)
+void LinkedListNode_destroy(LinkedListNode *linkedListNode)
 {
 
     //free content

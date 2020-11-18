@@ -6,16 +6,16 @@
 
 
 /**
- * @brief hash map, create hash map by cHashMap_create()
+ * @brief hash map, create hash map by HashMap_create()
  * 
  */
-typedef struct cHashMap HashMap;
+typedef struct HashMap HashMap;
 
 /**
  * @brief hash map
  * 
  */
-struct cHashMap
+struct HashMap
 {
 
     int (*hash)(const void* content);
@@ -34,7 +34,7 @@ struct cHashMap
 //  * @param hash 
 //  * @return HashMap 
 //  */
-// extern HashMap cHashMap_create(int (*comparter)(const void *contentA, const void *contentB), int (*hash)(const void* content));
+// extern HashMap HashMap_create(int (*comparter)(const void *contentA, const void *contentB), int (*hash)(const void* content));
 
 /**
  * @brief create hash map
@@ -42,7 +42,7 @@ struct cHashMap
  * @param hash 
  * @return HashMap 
  */
-extern HashMap cHashMap_create(int (*hash)(const void* content));
+extern HashMap HashMap_create(int (*hash)(const void* content));
 
 /**
  * @brief put key-value to hash map
@@ -51,7 +51,7 @@ extern HashMap cHashMap_create(int (*hash)(const void* content));
  * @param key 
  * @param value 
  */
-extern void cHashMap_put(HashMap* hashMap, const void* key, const void* value);
+extern void HashMap_put(HashMap* hashMap, const void* key, const void* value);
 
 /**
  * @brief get value of key
@@ -60,7 +60,7 @@ extern void cHashMap_put(HashMap* hashMap, const void* key, const void* value);
  * @param key 
  * @return void* 
  */
-extern void* cHashMap_get(const HashMap* hashMap, const void* key);
+extern void* HashMap_get(const HashMap* hashMap, const void* key);
 
 /**
  * @brief replace with new value
@@ -69,7 +69,17 @@ extern void* cHashMap_get(const HashMap* hashMap, const void* key);
  * @param key 
  * @param value 
  */
-extern void cHashMap_repalce(HashMap* hashMap, const void* key, const void* value);
+extern void HashMap_repalce(HashMap* hashMap, const void* key, const void* value);
+
+
+
+
+/**
+ * @brief free hash map
+ * 
+ * @param hashMap 
+ */
+extern void HashMap_destroy(HashMap* hashMap);
 
 
 

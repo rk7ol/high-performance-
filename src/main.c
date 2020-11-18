@@ -2,6 +2,7 @@
 #include <string.h>
 
 #include "cHashMap.h"
+#include "cArrayList.h"
 #include "util.h"
 
 int cube_temp_hash(const void *content)
@@ -12,10 +13,32 @@ int cube_temp_hash(const void *content)
     return c->index;
 }
 
+void arrayList_example()
+{
+
+    //create
+    ArrayList arrayList = ArrayList_create(sizeof(int));
+
+    //add
+    for (size_t i = 0; i < 100; i++)
+    {
+        ArrayList_add(&arrayList, &i);
+    }
+
+    //get and print
+    for (size_t i = 0; i < arrayList.current_size; i++)
+    {
+        printf("value: %d\n", *(int*)ArrayList_get(&arrayList, i));
+    }
+
+    //free
+    ArrayList_destroy(&arrayList);
+}
+
 void hashMap_example()
 {
     //create
-    HashMap hashMap = cHashMap_create(&cube_temp_hash);
+    HashMap hashMap = HashMap_create(&cube_temp_hash);
 
     //put
     cube_temp c1 = {
@@ -30,37 +53,32 @@ void hashMap_example()
         .index = 77,
         .temp = 35.5};
 
-    cHashMap_put(&hashMap, &c1, &c1);
-    cHashMap_put(&hashMap, &c2, &c2);
-    cHashMap_put(&hashMap, &c3, &c3);
-
+    HashMap_put(&hashMap, &c1, &c1);
+    HashMap_put(&hashMap, &c2, &c2);
+    HashMap_put(&hashMap, &c3, &c3);
 
     //get
     cube_temp recv = {
-        .index = 100
-    };
-    recv = *(cube_temp*)cHashMap_get(&hashMap, &recv);
+        .index = 100};
+    recv = *(cube_temp *)HashMap_get(&hashMap, &recv);
     printf("temp: %f\n", recv.temp);
-
-
 
     //repalce
     cube_temp c5 = {
         .temp = 200};
 
-    cHashMap_repalce(&hashMap, &recv, &c5);
-    recv = *(cube_temp*)cHashMap_get(&hashMap, &recv);
+    HashMap_repalce(&hashMap, &recv, &c5);
+    recv = *(cube_temp *)HashMap_get(&hashMap, &recv);
 
     printf("temp: %f\n", recv.temp);
-
-
-
 }
 
 int main(int argc, char *argv[])
 {
 
-    hashMap_example();
+    //hashMap_example();
+
+    arrayList_example();
 
     return 0;
 }
