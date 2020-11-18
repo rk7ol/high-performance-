@@ -1,6 +1,6 @@
 #include "cLinkedList.h"
 
-LinkedList LinkedList_create(int (*comparter)(const void* content_A, const void *content_B))
+LinkedList LinkedList_create(int (*comparter)(const void *content_A, const void *content_B))
 {
 
     LinkedList linkedList = {
@@ -12,17 +12,15 @@ LinkedList LinkedList_create(int (*comparter)(const void* content_A, const void 
     return linkedList;
 }
 
-LinkedListNode* LinkedListNode_create(const void *content)
+LinkedListNode *LinkedListNode_create(const void *content)
 {
 
     LinkedListNode *linkedListNode = malloc(sizeof(LinkedListNode));
 
-
-    linkedListNode->content = (void*)content;
+    linkedListNode->content = (void *)content;
 
     linkedListNode->next = NULL;
     linkedListNode->previous = NULL;
-
 
     return linkedListNode;
 }
@@ -59,10 +57,34 @@ LinkedListNode *LinkedList_search(const LinkedList *linkedList, const void *key)
     return NULL;
 }
 
+char *LinkedList_getByIndex(const LinkedList *linkedList, const int index)
+{
+
+    if (linkedList->headNode == NULL || index > linkedList->size)
+    {
+        return NULL;
+    }
+    else
+    {
+        LinkedListNode *current;
+        current = linkedList->headNode;
+
+        for (size_t i = 0; i < index; i++)
+        {
+           current = current->next;
+        }
+
+        
+        return current->content;
+
+    }
+
+}
+
 void LinkedList_add(LinkedList *linkedList, const void *content)
 {
 
-    LinkedListNode* node = LinkedListNode_create(content);
+    LinkedListNode *node = LinkedListNode_create(content);
     if (linkedList->size == 0)
     {
         linkedList->headNode = node;

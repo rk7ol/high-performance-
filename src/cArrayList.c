@@ -22,7 +22,7 @@ ArrayList ArrayList_create_bysize(int element_size, int size){
 		.current_size = 0,
 		.element_size = element_size,
 		.size = size,
-		.content = 0
+		.content = malloc(size * element_size)
 	};
 
 	return list;

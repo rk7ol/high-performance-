@@ -76,6 +76,17 @@ extern LinkedListNode* LinkedListNode_create(const void *content);
  */
 extern LinkedListNode *LinkedList_search(const LinkedList *linkedList, const void *content);
 
+
+
+/**
+ * @brief get element by index
+ * 
+ * @param linkedList 
+ * @param index 
+ * @return char* 
+ */
+extern char* LinkedList_getByIndex(const LinkedList *linkedList, const int index);
+
 /**
  * @brief add a node with content to the end of the linkedList
  * 

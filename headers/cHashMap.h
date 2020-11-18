@@ -1,4 +1,5 @@
 #include "cLinkedList.h"
+#include "cArrayList.h"
 
 
 #ifndef _CHASHMAP_H_
@@ -18,11 +19,22 @@ typedef struct HashMap HashMap;
 struct HashMap
 {
 
+    /**
+     * @brief content provide key
+     * 
+     */
     int (*hash)(const void* content);
 
 
-    LinkedList list;
+    ArrayList list;
 
+    // key size
+    const int sizeof_key;
+
+    //load factor
+    const float LOAD_FACTOR;
+
+    int current_size;
 };
 
 
@@ -42,7 +54,7 @@ struct HashMap
  * @param hash 
  * @return HashMap 
  */
-extern HashMap HashMap_create(int (*hash)(const void* content));
+extern HashMap HashMap_create(int (*hash)(const void* content), const int sizeof_key, const float LOAD_FACTOR);
 
 /**
  * @brief put key-value to hash map
