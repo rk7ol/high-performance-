@@ -1,0 +1,22 @@
+{
+  "type": "record",
+  "name": "Point",
+  "fields": [
+    {
+      "name": "coord_x",
+      "type": "int"
+    },
+    {
+      "name": "coord_y",
+      "type": "int"
+    },
+    {
+      "name": "coord_z",
+      "type": "int"
+    },
+    {
+      "name": "temp",
+      "type": "double"
+    }
+  ]
+}

@@ -8,7 +8,7 @@ OBJDIR = out
 TARGETDIR = target
 
 
-OBJS = main.o cLinkedList.o cHashMap.o cArrayList.o
+OBJS = main.o cLinkedList.o cHashMap.o cArrayList.o avro_serializer.o kafka_producer.o base64.o
 TARGET = HP
 OBJOUT = $(patsubst %,$(OBJDIR)/%,$(OBJS))
 
@@ -16,7 +16,7 @@ OBJOUT = $(patsubst %,$(OBJDIR)/%,$(OBJS))
 
 $(TARGET) : $(OBJS)
 	@mkdir -p $(TARGETDIR) || true
-	gcc -o $(TARGETDIR)/$(TARGET) $(OBJOUT)
+	gcc -o $(TARGETDIR)/$(TARGET) $(OBJOUT) -lavro -lrdkafka
 
 $(OBJS) : %.o : %.c
 	@mkdir -p $(OBJDIR) || true
