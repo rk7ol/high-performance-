@@ -32,13 +32,25 @@ struct process_send_num
 
 typedef struct process_send_num process_send_num;
 
+
+
 /**
- * @brief  
+ * @brief get process num by cube index
+ * 
+ * @param index cube index
+ * @param process_num 
+ * @return int process num
+ */
+extern int communicator_get_process_num_by_index(int index);
+
+/**
+ * @brief 
  * 
  * @param arr_cube 
  * @param size 
- * @return process_send_num* 
+ * @param process_size 
+ * @return process_send_num*  (process num)<->(send num), size : process size
  */
-extern process_send_num *communicator_get_process_send_num_list(const arr_cube *arr_cube, const size_t size);
+extern process_send_num *communicator_get_process_send_num_list(const arr_cube *arr_cube, const size_t size, const size_t process_size);
 
 #endif
