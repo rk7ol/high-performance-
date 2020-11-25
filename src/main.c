@@ -7,6 +7,11 @@
 #include "avro_serializer.h"
 #include "kafka_producer.h"
 
+
+
+#include "heat_conduct.h"
+#include "communicator.h"
+
 int cube_temp_hash(const void *content)
 {
 
@@ -107,6 +112,30 @@ void send_message_example(char *schemaFilePath)
     kafka_producer_destroy(&producer);
     avro_serializer_destroy(&serializer);
 }
+
+
+
+
+arr_cube* create_arr_cube_example(){
+
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 int main(int argc, char *argv[])
 {

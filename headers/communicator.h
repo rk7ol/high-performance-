@@ -4,12 +4,11 @@
 #define _COMMUNICATOR_H_
 
 #include <stdlib.h>
-
+#include "cHashMap.h"
 
 #define x_length 50
 #define y_length 50
 #define z_length 50
-
 
 struct cube
 {
@@ -51,11 +50,10 @@ struct send_table_element
     int pro_t;
     int element_numb;
     int current_element_numb;
-    struct send_element * element;
+    struct send_element *element;
 };
 
 typedef struct send_table_element send_table_element;
-
 
 /**
  * @brief get process num by cube index
@@ -76,8 +74,6 @@ extern int communicator_get_process_num_by_index(int index);
  */
 extern process_send_num *communicator_get_process_send_num_list(const arr_cube *arr_cube, const size_t size, const size_t process_size);
 
-
-
 /**
  * @brief  filling the arrcube
  * 
@@ -86,7 +82,7 @@ extern process_send_num *communicator_get_process_send_num_list(const arr_cube *
  * @param  cube_numb_of_pro
  * @return arr_cube of each process
  */
-extern  arr_cube * fillarrcube(/*三维数组*/int myrank,int cube_numb_of_pro); 
+extern arr_cube *fillarrcube(/*三维数组*/ int myrank, int cube_numb_of_pro);
 
 /**
  * @brief create send table
@@ -94,7 +90,7 @@ extern  arr_cube * fillarrcube(/*三维数组*/int myrank,int cube_numb_of_pro);
  * @param allrank
  * @return send_table
  */
-extern send_table_element* create_send_table(int allrank);
+extern send_table_element *create_send_table(int allrank);
 
 /**
  * @brief filling the send table
@@ -102,8 +98,6 @@ extern send_table_element* create_send_table(int allrank);
  * @param cube_numb_of_pro
  * @return send_table
  */
-extern send_table_element* fill_send_table(int cube_numb_of_pro);
-
-
+extern send_table_element *fill_send_table(int cube_numb_of_pro);
 
 #endif
