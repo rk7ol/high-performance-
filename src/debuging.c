@@ -206,20 +206,36 @@ int main(int argc,char**argv)
     }
 //section2 end
 
-    // if(myrank==0)
-    // {
-    //     printf("proess:%d\n",myrank);
-    //     for(int i=0;i<cube_numb_of_pro;i++)
-    //     {
-    //         printf("index:%d\n",myarr[i].temp.index);
-    //         printf("connect:\n");
-    //         for(int j=0;j<6;j++)
-    //         {
-    //             printf("%d ",myarr[i].connect[j]);
-    //         }
-    //         printf("\n");
-    //     }
-    // }
+    if(myrank==0)
+    {
+        printf("proess:%d\n",myrank);
+        for(int i=0;i<cube_numb_of_pro;i++)
+        {
+            printf("index:%d\n",myarr[i].temp.index);
+            printf("connect:\n");
+            for(int j=0;j<6;j++)
+            {
+                printf("%d ",myarr[i].connect[j]);
+            }
+            printf("\n");
+        }
+        sleep(2);
+    }
+    else
+    {
+                printf("proess:%d\n",myrank);
+        for(int i=0;i<cube_numb_of_pro;i++)
+        {
+            printf("index:%d\n",myarr[i].temp.index);
+            printf("connect:\n");
+            for(int j=0;j<6;j++)
+            {
+                printf("%d ",myarr[i].connect[j]);
+            }
+            printf("\n");
+        }
+    }
+    
 
 //section3 通信前的准备工作 
 
