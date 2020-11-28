@@ -571,6 +571,7 @@ void communication(int allrank, int myrank, int cube_numb_of_pro, struct send_ta
 
             for (int i = 0; i < con_arr[i].send_num; i++)
             {
+                printf("rank[%d], update index[%d] to temp<%f>\n", myrank, recv[i].index, recv[i].tempa);
                 *(double *)HashMap_get(index_temp_table, &recv[i].index) = recv[i].tempa;
             }
 

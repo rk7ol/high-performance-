@@ -79,6 +79,9 @@ int main(int argc, char *argv[])
 
     HashMap index_temp_table = heat_conduct_create_index_temp_table(myarr, cube_numb_of_pro);
 
+
+    int count = 0;
+
     do
     {
 
@@ -94,9 +97,15 @@ int main(int argc, char *argv[])
             printf("delta: %f\n", *max_delta);
         }
 
+    //} while (!heat_conduct_isDone(*max_delta) && (count++ < 100));
     } while (!heat_conduct_isDone(*max_delta));
 
     printf("done\n");
+
+    for (size_t i = 0; i < cube_numb_of_pro; i++)
+    {
+        printf("rank[%d], temp:<%f>\n", myrank, myarr[i].temp.tempa);
+    }
 
     MPI_Finalize();
 

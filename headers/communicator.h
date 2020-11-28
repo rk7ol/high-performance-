@@ -7,9 +7,9 @@
 #include "cHashMap.h"
 #include"mpi.h"
 #include <stdio.h>
-#define x_length 50
-#define y_length 50
-#define z_length 50
+#define x_length 2
+#define y_length 2
+#define z_length 2
 
 struct cube
 {
