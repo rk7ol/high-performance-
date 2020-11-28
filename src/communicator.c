@@ -567,17 +567,19 @@ void communication(int allrank, int myrank, int cube_numb_of_pro, struct send_ta
             MPI_Status status;
             struct send_element *recv = malloc(cube_numb_of_pro * sizeof(struct send_element));
             MPI_Recv(recv, con_arr[i].send_num, MPI_send_element, i, i, MPI_COMM_WORLD, &status);
-            //更新index-table
+            //更新index-temp table
 
-            for (int i = 0; i < con_arr[i].send_num; i++)
+            int numb; //此次通信获取的MPI_send_element的数量
+            MPI_Get_count(&status, MPI_send_element, &numb);
+
+            for (int i = 0; i < numb; i++)
             {
                 printf("rank[%d], update index[%d] to temp<%f>\n", myrank, recv[i].index, recv[i].tempa);
                 *(double *)HashMap_get(index_temp_table, &recv[i].index) = recv[i].tempa;
             }
 
+
             //index-table更新完毕
-            int numb; //此次通信获取的MPI_send_element的数量
-            MPI_Get_count(&status, MPI_send_element, &numb);
             // printf("%d\n",numb);
             // if(numb!=0)
             // printf("process:%d\n%d\n%f\n",myrank,recv[1].index,recv[1].tempa);

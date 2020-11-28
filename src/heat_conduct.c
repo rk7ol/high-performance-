@@ -88,9 +88,10 @@ double heat_conduct_play(arr_cube *arr_cube, const size_t arr_cube_length, HashM
                 *temp_sum += env_temp;
             }
         }
-        printf("\n[rank: %d],sum:<%f>", rank, arr_cube[i].temp.index, *temp_sum);
+         printf("\n");
+        printf("[rank: %d],sum:<%f>\n", rank, arr_cube[i].temp.index, *temp_sum);
         *temp_sum = *temp_sum / 6;
-        printf("\n[rank: %d],averange:<%f>", rank, arr_cube[i].temp.index, *temp_sum);
+        printf("[rank: %d],averange:<%f>\n", rank, arr_cube[i].temp.index, *temp_sum);
         //printf("%f - %f\n", arr_cube[i].temp.tempa, *temp_sum);
 
         double delta = arr_cube[i].temp.tempa - *temp_sum;
@@ -154,7 +155,7 @@ double heat_conduct_play(arr_cube *arr_cube, const size_t arr_cube_length, HashM
 int heat_conduct_isDone(double value)
 {
 
-    if (value < 1)
+    if (value < 0.001)
     {
         return 1;
     }
