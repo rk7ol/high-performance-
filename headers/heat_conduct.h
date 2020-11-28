@@ -20,12 +20,33 @@ extern HashMap heat_conduct_create_index_temp_table(arr_cube* arr_cube, const si
 
 
 /**
- * @brief play heat conduct, index-temp table will change to new state
+ * @brief play heat conduct, index-temp table and cube array will be changed to new state
  * 
  * @param arr_cube 
+ * @param arr_cube_length 
  * @param index_temp_table 
+ * @return double 
  */
-extern void heat_conduct_play(arr_cube* arr_cube, const size_t arr_cube_length, HashMap* index_temp_table);
+extern double heat_conduct_play(arr_cube* arr_cube, const size_t arr_cube_length, HashMap* index_temp_table);
+
+
+
+
+
+
+
+
+
+/**
+ * @brief whether value can lead to done
+ * 
+ * @param value 
+ * @return int [done <-> 1], [not done <-> 0] 
+ */
+extern int heat_conduct_isDone(double value);
+
+
+
 
 
 

@@ -1,9 +1,9 @@
-#include"test.h"
+#include "test.h"
 
 //通过index获得进程号
 int communicator_get_process_num_by_index(int index, int cube_numb)
 {
-        int i;
+    int i;
     i = index / cube_numb;
     if (index % cube_numb == 0)
     {
@@ -13,9 +13,9 @@ int communicator_get_process_num_by_index(int index, int cube_numb)
 }
 
 //返回相邻方块数目
-process_send_num *communicator_get_process_send_num_list(const struct arrcube *arr_cube, const size_t size, const size_t process_size)
+process_send_num *communicator_get_process_send_num_list(const arr_cube *arr_cube, const size_t size, const size_t process_size)
 {
-     //initialize
+    //initialize
     process_send_num *result = malloc(sizeof(process_send_num) * process_size);
 
     for (size_t i = 0; i < process_size; i++)
@@ -47,18 +47,18 @@ process_send_num *communicator_get_process_send_num_list(const struct arrcube *a
 }
 
 //创建三维数组
-int ***create_three_dimen_arr(int m,int n,int t)
+int ***create_three_dimen_arr(int m, int n, int t)
 {
     int i = 0;
     int k = 0;
-    int*** result = NULL;
+    int ***result = NULL;
     if ((m > 0) && (n > 0) && (t > 0))
     {
-        int** pp = NULL;
-        int* p = NULL;
-        result = (int***)malloc(m * sizeof(int**));     // key
-        pp = (int**)malloc(m * n * sizeof(int*));      // key
-        p = (int*)malloc(m * n * t * sizeof(int));     // key
+        int **pp = NULL;
+        int *p = NULL;
+        result = (int ***)malloc(m * sizeof(int **)); // key
+        pp = (int **)malloc(m * n * sizeof(int *));   // key
+        p = (int *)malloc(m * n * t * sizeof(int));   // key
         if ((result != NULL) && (pp != NULL) && (p != NULL))
         {
             for (i = 0; i < m; i++)
@@ -84,20 +84,19 @@ int ***create_three_dimen_arr(int m,int n,int t)
     return result;
 }
 
-
 //创建三维结构体数组
-struct cube*** create_three_dimen_struct_cube(int m,int n,int t)
+struct cube ***create_three_dimen_struct_cube(int m, int n, int t)
 {
     int i = 0;
     int k = 0;
-    struct cube*** result = NULL;
+    struct cube ***result = NULL;
     if ((m > 0) && (n > 0) && (t > 0))
     {
-        struct cube** pp = NULL;
-        struct cube* p = NULL;
-        result = (struct cube***)malloc(m * sizeof(struct cube**));     // key
-        pp = (struct cube**)malloc(m * n * sizeof(struct cube*));      // key
-        p = (struct cube*)malloc(m * n * t * sizeof(struct cube));     // key
+        struct cube **pp = NULL;
+        struct cube *p = NULL;
+        result = (struct cube ***)malloc(m * sizeof(struct cube **)); // key
+        pp = (struct cube **)malloc(m * n * sizeof(struct cube *));   // key
+        p = (struct cube *)malloc(m * n * t * sizeof(struct cube));   // key
         if ((result != NULL) && (pp != NULL) && (p != NULL))
         {
             for (i = 0; i < m; i++)
@@ -124,17 +123,17 @@ struct cube*** create_three_dimen_struct_cube(int m,int n,int t)
 }
 
 //填充三维结构体数组
-int fill_arr(struct cube *** temp,int ***arr)
+int fill_arr(struct cube ***temp, int ***arr)
 {
     int temp_index = 1;
-    double temp_tempa=1.0;
+    double temp_tempa = 1.0;
     for (int i = 0; i < x_length; i++)
     {
         for (int j = 0; j < y_length; j++)
         {
             for (int k = 0; k < z_length; k++)
             {
-            
+
                 //假如是内部方块
                 if (arr[i][j][k] == 1)
                 {
@@ -144,7 +143,7 @@ int fill_arr(struct cube *** temp,int ***arr)
                     temp[i][j][k].index = temp_index;
                     temp[i][j][k].tempa = temp_tempa;
                     ++temp_index;
-                    temp_tempa+=1.0;
+                    temp_tempa += 1.0;
                 }
                 //外部方块（环境方块）
                 else
@@ -159,15 +158,14 @@ int fill_arr(struct cube *** temp,int ***arr)
             }
         }
     }
-    return temp_index-1;
+    return temp_index - 1;
 }
 
-
 //填充二维数组
-struct arrcube *fill_arr_of_cube(int x,int y,int z,int myrank,int cube_numb_of_pro,struct cube *** temp)
+arr_cube *fill_arr_of_cube(int x, int y, int z, int myrank, int cube_numb_of_pro, struct cube ***temp)
 {
-    
-        struct arrcube *myarr = malloc(sizeof(struct arrcube) * cube_numb_of_pro);
+
+    arr_cube *myarr = malloc(sizeof(arr_cube) * cube_numb_of_pro);
     for (int i = 0; i < x; i++)
     {
         for (int j = 0; j < y; j++)
@@ -176,7 +174,7 @@ struct arrcube *fill_arr_of_cube(int x,int y,int z,int myrank,int cube_numb_of_p
             {
                 //填充该进程负责的myarr中的数据
                 //假如某个方块属于该进程负责
-                
+
                 if ((temp[i][j][k].index > myrank * cube_numb_of_pro) && (temp[i][j][k].index <= (myrank * cube_numb_of_pro + cube_numb_of_pro)))
                 {
                     int myarr_index;
@@ -193,253 +191,252 @@ struct arrcube *fill_arr_of_cube(int x,int y,int z,int myrank,int cube_numb_of_p
 
                     /*填充方块的相邻关系index，若某方块的index为-1，则该方块为外部方块*/
                     //8个角
-                    if(i==0&&j==0&&k==0)
+                    if (i == 0 && j == 0 && k == 0)
                     {
                         myarr[myarr_index].connect[0] = temp[i + 1][j][k].index;
-                    myarr[myarr_index].connect[1] = -1;
-                    myarr[myarr_index].connect[2] = temp[i][j + 1][k].index;
-                    myarr[myarr_index].connect[3] = -1;
-                    myarr[myarr_index].connect[4] = temp[i][j][k + 1].index;
-                    myarr[myarr_index].connect[5] = -1;
+                        myarr[myarr_index].connect[1] = -1;
+                        myarr[myarr_index].connect[2] = temp[i][j + 1][k].index;
+                        myarr[myarr_index].connect[3] = -1;
+                        myarr[myarr_index].connect[4] = temp[i][j][k + 1].index;
+                        myarr[myarr_index].connect[5] = -1;
                     }
-                    else if(i==0&&j==0&&k==z_length-1)
+                    else if (i == 0 && j == 0 && k == z_length - 1)
                     {
                         myarr[myarr_index].connect[0] = temp[i + 1][j][k].index;
-                    myarr[myarr_index].connect[1] = -1;
-                    myarr[myarr_index].connect[2] = temp[i][j + 1][k].index;
-                    myarr[myarr_index].connect[3] = -1;
-                    myarr[myarr_index].connect[4] = -1;
-                    myarr[myarr_index].connect[5] = temp[i][j][k - 1].index;
+                        myarr[myarr_index].connect[1] = -1;
+                        myarr[myarr_index].connect[2] = temp[i][j + 1][k].index;
+                        myarr[myarr_index].connect[3] = -1;
+                        myarr[myarr_index].connect[4] = -1;
+                        myarr[myarr_index].connect[5] = temp[i][j][k - 1].index;
                     }
-                    else if(i==0&&j==y_length-1&&k==0)
+                    else if (i == 0 && j == y_length - 1 && k == 0)
                     {
                         myarr[myarr_index].connect[0] = temp[i + 1][j][k].index;
-                    myarr[myarr_index].connect[1] = -1;
-                    myarr[myarr_index].connect[2] = -1;
-                    myarr[myarr_index].connect[3] = temp[i][j - 1][k].index;
-                    myarr[myarr_index].connect[4] = temp[i][j][k + 1].index;
-                    myarr[myarr_index].connect[5] = -1;
+                        myarr[myarr_index].connect[1] = -1;
+                        myarr[myarr_index].connect[2] = -1;
+                        myarr[myarr_index].connect[3] = temp[i][j - 1][k].index;
+                        myarr[myarr_index].connect[4] = temp[i][j][k + 1].index;
+                        myarr[myarr_index].connect[5] = -1;
                     }
-                    else if(i==0&&j==y_length-1&&k==z_length-1)
+                    else if (i == 0 && j == y_length - 1 && k == z_length - 1)
                     {
                         myarr[myarr_index].connect[0] = temp[i + 1][j][k].index;
-                    myarr[myarr_index].connect[1] = -1;
-                    myarr[myarr_index].connect[2] = -1;
-                    myarr[myarr_index].connect[3] = temp[i][j - 1][k].index;
-                    myarr[myarr_index].connect[4] = -1;
-                    myarr[myarr_index].connect[5] = temp[i][j][k - 1].index;
+                        myarr[myarr_index].connect[1] = -1;
+                        myarr[myarr_index].connect[2] = -1;
+                        myarr[myarr_index].connect[3] = temp[i][j - 1][k].index;
+                        myarr[myarr_index].connect[4] = -1;
+                        myarr[myarr_index].connect[5] = temp[i][j][k - 1].index;
                     }
-                    else if(i==x_length-1&&j==0&&k==0)
+                    else if (i == x_length - 1 && j == 0 && k == 0)
                     {
                         myarr[myarr_index].connect[0] = -1;
-                    myarr[myarr_index].connect[1] = temp[i - 1][j][k].index;
-                    myarr[myarr_index].connect[2] = temp[i][j + 1][k].index;
-                    myarr[myarr_index].connect[3] = -1;
-                    myarr[myarr_index].connect[4] = temp[i][j][k + 1].index;
-                    myarr[myarr_index].connect[5] = -1;
+                        myarr[myarr_index].connect[1] = temp[i - 1][j][k].index;
+                        myarr[myarr_index].connect[2] = temp[i][j + 1][k].index;
+                        myarr[myarr_index].connect[3] = -1;
+                        myarr[myarr_index].connect[4] = temp[i][j][k + 1].index;
+                        myarr[myarr_index].connect[5] = -1;
                     }
-                    else if(i==x_length-1&&j==0&&k==z_length-1)
+                    else if (i == x_length - 1 && j == 0 && k == z_length - 1)
                     {
                         myarr[myarr_index].connect[0] = -1;
-                    myarr[myarr_index].connect[1] = temp[i - 1][j][k].index;
-                    myarr[myarr_index].connect[2] = temp[i][j + 1][k].index;
-                    myarr[myarr_index].connect[3] = -1;
-                    myarr[myarr_index].connect[4] = -1;
-                    myarr[myarr_index].connect[5] = temp[i][j][k - 1].index;
+                        myarr[myarr_index].connect[1] = temp[i - 1][j][k].index;
+                        myarr[myarr_index].connect[2] = temp[i][j + 1][k].index;
+                        myarr[myarr_index].connect[3] = -1;
+                        myarr[myarr_index].connect[4] = -1;
+                        myarr[myarr_index].connect[5] = temp[i][j][k - 1].index;
                     }
-                    else if(i==x_length-1&&j==y_length-1&&k==0)
-                    {
-                        myarr[myarr_index].connect[0] =-1;
-                    myarr[myarr_index].connect[1] = temp[i - 1][j][k].index;
-                    myarr[myarr_index].connect[2] = -1;
-                    myarr[myarr_index].connect[3] = temp[i][j - 1][k].index;
-                    myarr[myarr_index].connect[4] = temp[i][j][k + 1].index;
-                    myarr[myarr_index].connect[5] = -1;
-                    }
-                    else if(i==x_length-1&&j==y_length-1&&k==z_length-1)
+                    else if (i == x_length - 1 && j == y_length - 1 && k == 0)
                     {
                         myarr[myarr_index].connect[0] = -1;
-                    myarr[myarr_index].connect[1] = temp[i - 1][j][k].index;
-                    myarr[myarr_index].connect[2] = -1;
-                    myarr[myarr_index].connect[3] = temp[i][j - 1][k].index;
-                    myarr[myarr_index].connect[4] = -1;
-                    myarr[myarr_index].connect[5] = temp[i][j][k - 1].index;
+                        myarr[myarr_index].connect[1] = temp[i - 1][j][k].index;
+                        myarr[myarr_index].connect[2] = -1;
+                        myarr[myarr_index].connect[3] = temp[i][j - 1][k].index;
+                        myarr[myarr_index].connect[4] = temp[i][j][k + 1].index;
+                        myarr[myarr_index].connect[5] = -1;
+                    }
+                    else if (i == x_length - 1 && j == y_length - 1 && k == z_length - 1)
+                    {
+                        myarr[myarr_index].connect[0] = -1;
+                        myarr[myarr_index].connect[1] = temp[i - 1][j][k].index;
+                        myarr[myarr_index].connect[2] = -1;
+                        myarr[myarr_index].connect[3] = temp[i][j - 1][k].index;
+                        myarr[myarr_index].connect[4] = -1;
+                        myarr[myarr_index].connect[5] = temp[i][j][k - 1].index;
                     }
                     //12条棱长
-                    else if(i==0&&j==0&&k!=0&&k!=z_length-1)
+                    else if (i == 0 && j == 0 && k != 0 && k != z_length - 1)
                     {
                         myarr[myarr_index].connect[0] = temp[i + 1][j][k].index;
-                    myarr[myarr_index].connect[1] = -1;
-                    myarr[myarr_index].connect[2] = temp[i][j + 1][k].index;
-                    myarr[myarr_index].connect[3] = -1;
-                    myarr[myarr_index].connect[4] = temp[i][j][k + 1].index;
-                    myarr[myarr_index].connect[5] = temp[i][j][k - 1].index;
+                        myarr[myarr_index].connect[1] = -1;
+                        myarr[myarr_index].connect[2] = temp[i][j + 1][k].index;
+                        myarr[myarr_index].connect[3] = -1;
+                        myarr[myarr_index].connect[4] = temp[i][j][k + 1].index;
+                        myarr[myarr_index].connect[5] = temp[i][j][k - 1].index;
                     }
-                    else if(i==x_length-1&&j==0&&k!=0&&k!=z_length-1)
+                    else if (i == x_length - 1 && j == 0 && k != 0 && k != z_length - 1)
                     {
                         myarr[myarr_index].connect[0] = -1;
-                    myarr[myarr_index].connect[1] = temp[i - 1][j][k].index;
-                    myarr[myarr_index].connect[2] = temp[i][j + 1][k].index;
-                    myarr[myarr_index].connect[3] = -1;
-                    myarr[myarr_index].connect[4] = temp[i][j][k + 1].index;
-                    myarr[myarr_index].connect[5] = temp[i][j][k - 1].index;
+                        myarr[myarr_index].connect[1] = temp[i - 1][j][k].index;
+                        myarr[myarr_index].connect[2] = temp[i][j + 1][k].index;
+                        myarr[myarr_index].connect[3] = -1;
+                        myarr[myarr_index].connect[4] = temp[i][j][k + 1].index;
+                        myarr[myarr_index].connect[5] = temp[i][j][k - 1].index;
                     }
-                    else if(i==x_length-1&&j==y_length-1&&k!=0&&k!=z_length-1)
+                    else if (i == x_length - 1 && j == y_length - 1 && k != 0 && k != z_length - 1)
                     {
                         myarr[myarr_index].connect[0] = -1;
-                    myarr[myarr_index].connect[1] = temp[i - 1][j][k].index;
-                    myarr[myarr_index].connect[2] = -1;
-                    myarr[myarr_index].connect[3] = temp[i][j - 1][k].index;
-                    myarr[myarr_index].connect[4] = temp[i][j][k + 1].index;
-                    myarr[myarr_index].connect[5] = temp[i][j][k - 1].index;
+                        myarr[myarr_index].connect[1] = temp[i - 1][j][k].index;
+                        myarr[myarr_index].connect[2] = -1;
+                        myarr[myarr_index].connect[3] = temp[i][j - 1][k].index;
+                        myarr[myarr_index].connect[4] = temp[i][j][k + 1].index;
+                        myarr[myarr_index].connect[5] = temp[i][j][k - 1].index;
                     }
-                    else if(i==0&&j==y_length-1&&k!=0&&k!=z_length-1)
+                    else if (i == 0 && j == y_length - 1 && k != 0 && k != z_length - 1)
                     {
                         myarr[myarr_index].connect[0] = temp[i + 1][j][k].index;
-                    myarr[myarr_index].connect[1] = -1;
-                    myarr[myarr_index].connect[2] = -1;
-                    myarr[myarr_index].connect[3] = temp[i][j - 1][k].index;
-                    myarr[myarr_index].connect[4] = temp[i][j][k + 1].index;
-                    myarr[myarr_index].connect[5] = temp[i][j][k - 1].index;
+                        myarr[myarr_index].connect[1] = -1;
+                        myarr[myarr_index].connect[2] = -1;
+                        myarr[myarr_index].connect[3] = temp[i][j - 1][k].index;
+                        myarr[myarr_index].connect[4] = temp[i][j][k + 1].index;
+                        myarr[myarr_index].connect[5] = temp[i][j][k - 1].index;
                     }
-                    else if(k==0&&j==0&&i!=0&&i!=x_length-1)
+                    else if (k == 0 && j == 0 && i != 0 && i != x_length - 1)
                     {
                         myarr[myarr_index].connect[0] = temp[i + 1][j][k].index;
-                    myarr[myarr_index].connect[1] = temp[i - 1][j][k].index;
-                    myarr[myarr_index].connect[2] = temp[i][j + 1][k].index;
-                    myarr[myarr_index].connect[3] = -1;
-                    myarr[myarr_index].connect[4] = temp[i][j][k + 1].index;
-                    myarr[myarr_index].connect[5] = -1;
+                        myarr[myarr_index].connect[1] = temp[i - 1][j][k].index;
+                        myarr[myarr_index].connect[2] = temp[i][j + 1][k].index;
+                        myarr[myarr_index].connect[3] = -1;
+                        myarr[myarr_index].connect[4] = temp[i][j][k + 1].index;
+                        myarr[myarr_index].connect[5] = -1;
                     }
 
-                     else if(k==0&&j==y_length-1&&i!=0&&i!=x_length-1)
+                    else if (k == 0 && j == y_length - 1 && i != 0 && i != x_length - 1)
                     {
                         myarr[myarr_index].connect[0] = temp[i + 1][j][k].index;
-                    myarr[myarr_index].connect[1] = temp[i - 1][j][k].index;
-                    myarr[myarr_index].connect[2] = -1;
-                    myarr[myarr_index].connect[3] = temp[i][j - 1][k].index;
-                    myarr[myarr_index].connect[4] = temp[i][j][k + 1].index;
-                    myarr[myarr_index].connect[5] = -1;
+                        myarr[myarr_index].connect[1] = temp[i - 1][j][k].index;
+                        myarr[myarr_index].connect[2] = -1;
+                        myarr[myarr_index].connect[3] = temp[i][j - 1][k].index;
+                        myarr[myarr_index].connect[4] = temp[i][j][k + 1].index;
+                        myarr[myarr_index].connect[5] = -1;
                     }
-                      else if(k==z_length-1&&j==0&&i!=0&&i!=x_length-1)
+                    else if (k == z_length - 1 && j == 0 && i != 0 && i != x_length - 1)
                     {
                         myarr[myarr_index].connect[0] = temp[i + 1][j][k].index;
-                    myarr[myarr_index].connect[1] = temp[i - 1][j][k].index;
-                    myarr[myarr_index].connect[2] = temp[i][j + 1][k].index;
-                    myarr[myarr_index].connect[3] = -1;
-                    myarr[myarr_index].connect[4] = -1;
-                    myarr[myarr_index].connect[5] = temp[i][j][k - 1].index;
+                        myarr[myarr_index].connect[1] = temp[i - 1][j][k].index;
+                        myarr[myarr_index].connect[2] = temp[i][j + 1][k].index;
+                        myarr[myarr_index].connect[3] = -1;
+                        myarr[myarr_index].connect[4] = -1;
+                        myarr[myarr_index].connect[5] = temp[i][j][k - 1].index;
                     }
-                     else if(k==z_length-1&&j==y_length-1&&i!=0&&i!=x_length-1)
+                    else if (k == z_length - 1 && j == y_length - 1 && i != 0 && i != x_length - 1)
                     {
                         myarr[myarr_index].connect[0] = temp[i + 1][j][k].index;
-                    myarr[myarr_index].connect[1] = temp[i - 1][j][k].index;
-                    myarr[myarr_index].connect[2] = -1;
-                    myarr[myarr_index].connect[3] = temp[i][j - 1][k].index;
-                    myarr[myarr_index].connect[4] =-1;
-                    myarr[myarr_index].connect[5] = temp[i][j][k - 1].index;
+                        myarr[myarr_index].connect[1] = temp[i - 1][j][k].index;
+                        myarr[myarr_index].connect[2] = -1;
+                        myarr[myarr_index].connect[3] = temp[i][j - 1][k].index;
+                        myarr[myarr_index].connect[4] = -1;
+                        myarr[myarr_index].connect[5] = temp[i][j][k - 1].index;
                     }
-                    else if(i==0&&k==0&&j!=0&&j!=y_length-1)
+                    else if (i == 0 && k == 0 && j != 0 && j != y_length - 1)
                     {
                         myarr[myarr_index].connect[0] = temp[i + 1][j][k].index;
-                    myarr[myarr_index].connect[1] = -1;
-                    myarr[myarr_index].connect[2] = temp[i][j + 1][k].index;
-                    myarr[myarr_index].connect[3] = temp[i][j - 1][k].index;
-                    myarr[myarr_index].connect[4] = temp[i][j][k + 1].index;
-                    myarr[myarr_index].connect[5] = -1;
+                        myarr[myarr_index].connect[1] = -1;
+                        myarr[myarr_index].connect[2] = temp[i][j + 1][k].index;
+                        myarr[myarr_index].connect[3] = temp[i][j - 1][k].index;
+                        myarr[myarr_index].connect[4] = temp[i][j][k + 1].index;
+                        myarr[myarr_index].connect[5] = -1;
                     }
-                    else if(i==x_length-1&&k==0&&j!=0&&j!=y_length-1)
+                    else if (i == x_length - 1 && k == 0 && j != 0 && j != y_length - 1)
                     {
                         myarr[myarr_index].connect[0] = -1;
-                    myarr[myarr_index].connect[1] = temp[i - 1][j][k].index;
-                    myarr[myarr_index].connect[2] = temp[i][j + 1][k].index;
-                    myarr[myarr_index].connect[3] = temp[i][j - 1][k].index;
-                    myarr[myarr_index].connect[4] = temp[i][j][k + 1].index;
-                    myarr[myarr_index].connect[5] = -1;
+                        myarr[myarr_index].connect[1] = temp[i - 1][j][k].index;
+                        myarr[myarr_index].connect[2] = temp[i][j + 1][k].index;
+                        myarr[myarr_index].connect[3] = temp[i][j - 1][k].index;
+                        myarr[myarr_index].connect[4] = temp[i][j][k + 1].index;
+                        myarr[myarr_index].connect[5] = -1;
                     }
-                    else if(i==0&&k==z_length-1&&j!=0&&j!=y_length-1)
+                    else if (i == 0 && k == z_length - 1 && j != 0 && j != y_length - 1)
                     {
                         myarr[myarr_index].connect[0] = temp[i + 1][j][k].index;
-                    myarr[myarr_index].connect[1] = -1;
-                    myarr[myarr_index].connect[2] = temp[i][j + 1][k].index;
-                    myarr[myarr_index].connect[3] = temp[i][j - 1][k].index;
-                    myarr[myarr_index].connect[4] = -1;
-                    myarr[myarr_index].connect[5] = temp[i][j][k - 1].index;
+                        myarr[myarr_index].connect[1] = -1;
+                        myarr[myarr_index].connect[2] = temp[i][j + 1][k].index;
+                        myarr[myarr_index].connect[3] = temp[i][j - 1][k].index;
+                        myarr[myarr_index].connect[4] = -1;
+                        myarr[myarr_index].connect[5] = temp[i][j][k - 1].index;
                     }
-                    else if(i==x_length-1&&k==z_length-1&&j!=0&&j!=y_length-1)
+                    else if (i == x_length - 1 && k == z_length - 1 && j != 0 && j != y_length - 1)
                     {
                         myarr[myarr_index].connect[0] = -1;
-                    myarr[myarr_index].connect[1] = temp[i - 1][j][k].index;
-                    myarr[myarr_index].connect[2] = -1;
-                    myarr[myarr_index].connect[3] = temp[i][j - 1][k].index;
-                    myarr[myarr_index].connect[4] = temp[i][j][k + 1].index;
-                    myarr[myarr_index].connect[5] = temp[i][j][k - 1].index;
+                        myarr[myarr_index].connect[1] = temp[i - 1][j][k].index;
+                        myarr[myarr_index].connect[2] = -1;
+                        myarr[myarr_index].connect[3] = temp[i][j - 1][k].index;
+                        myarr[myarr_index].connect[4] = temp[i][j][k + 1].index;
+                        myarr[myarr_index].connect[5] = temp[i][j][k - 1].index;
                     }
                     //6个面
-                    else if(i==0&&j!=0&&j!=y_length-1&&k!=0&&k!=z_length-1)
+                    else if (i == 0 && j != 0 && j != y_length - 1 && k != 0 && k != z_length - 1)
                     {
                         myarr[myarr_index].connect[0] = temp[i + 1][j][k].index;
-                    myarr[myarr_index].connect[1] = -1;
-                    myarr[myarr_index].connect[2] = temp[i][j + 1][k].index;
-                    myarr[myarr_index].connect[3] = temp[i][j - 1][k].index;
-                    myarr[myarr_index].connect[4] = temp[i][j][k + 1].index;
-                    myarr[myarr_index].connect[5] = temp[i][j][k - 1].index;
+                        myarr[myarr_index].connect[1] = -1;
+                        myarr[myarr_index].connect[2] = temp[i][j + 1][k].index;
+                        myarr[myarr_index].connect[3] = temp[i][j - 1][k].index;
+                        myarr[myarr_index].connect[4] = temp[i][j][k + 1].index;
+                        myarr[myarr_index].connect[5] = temp[i][j][k - 1].index;
                     }
-                    else if(i==x_length-1&&j!=0&&j!=y_length-1&&k!=0&&k!=z_length-1)
+                    else if (i == x_length - 1 && j != 0 && j != y_length - 1 && k != 0 && k != z_length - 1)
                     {
-                    myarr[myarr_index].connect[0] = -1;
-                    myarr[myarr_index].connect[1] = temp[i - 1][j][k].index;
-                    myarr[myarr_index].connect[2] = temp[i][j + 1][k].index;
-                    myarr[myarr_index].connect[3] = temp[i][j - 1][k].index;
-                    myarr[myarr_index].connect[4] = temp[i][j][k + 1].index;
-                    myarr[myarr_index].connect[5] = temp[i][j][k - 1].index;
+                        myarr[myarr_index].connect[0] = -1;
+                        myarr[myarr_index].connect[1] = temp[i - 1][j][k].index;
+                        myarr[myarr_index].connect[2] = temp[i][j + 1][k].index;
+                        myarr[myarr_index].connect[3] = temp[i][j - 1][k].index;
+                        myarr[myarr_index].connect[4] = temp[i][j][k + 1].index;
+                        myarr[myarr_index].connect[5] = temp[i][j][k - 1].index;
                     }
-                    else if(j==0&&i!=0&&i!=x_length-1&&k!=0&&k!=z_length-1)
-                    {
-                        myarr[myarr_index].connect[0] = temp[i + 1][j][k].index;
-                    myarr[myarr_index].connect[1] = temp[i - 1][j][k].index;
-                    myarr[myarr_index].connect[2] = temp[i][j + 1][k].index;
-                    myarr[myarr_index].connect[3] = -1;
-                    myarr[myarr_index].connect[4] = temp[i][j][k + 1].index;
-                    myarr[myarr_index].connect[5] = temp[i][j][k - 1].index;
-                    }
-                    else if(j==y_length-1&&i!=0&&i!=y_length-1&&k!=0&&k!=z_length-1)
+                    else if (j == 0 && i != 0 && i != x_length - 1 && k != 0 && k != z_length - 1)
                     {
                         myarr[myarr_index].connect[0] = temp[i + 1][j][k].index;
-                    myarr[myarr_index].connect[1] = temp[i - 1][j][k].index;
-                    myarr[myarr_index].connect[2] = -1;
-                    myarr[myarr_index].connect[3] = temp[i][j - 1][k].index;
-                    myarr[myarr_index].connect[4] = temp[i][j][k + 1].index;
-                    myarr[myarr_index].connect[5] = temp[i][j][k - 1].index;
+                        myarr[myarr_index].connect[1] = temp[i - 1][j][k].index;
+                        myarr[myarr_index].connect[2] = temp[i][j + 1][k].index;
+                        myarr[myarr_index].connect[3] = -1;
+                        myarr[myarr_index].connect[4] = temp[i][j][k + 1].index;
+                        myarr[myarr_index].connect[5] = temp[i][j][k - 1].index;
                     }
-                    else if(k==0&&j!=0&&j!=y_length-1&&i!=0&&i!=z_length-1)
+                    else if (j == y_length - 1 && i != 0 && i != y_length - 1 && k != 0 && k != z_length - 1)
                     {
                         myarr[myarr_index].connect[0] = temp[i + 1][j][k].index;
-                    myarr[myarr_index].connect[1] = temp[i - 1][j][k].index;
-                    myarr[myarr_index].connect[2] = temp[i][j + 1][k].index;
-                    myarr[myarr_index].connect[3] = temp[i][j - 1][k].index;
-                    myarr[myarr_index].connect[4] = temp[i][j][k + 1].index;
-                    myarr[myarr_index].connect[5] =-1;
+                        myarr[myarr_index].connect[1] = temp[i - 1][j][k].index;
+                        myarr[myarr_index].connect[2] = -1;
+                        myarr[myarr_index].connect[3] = temp[i][j - 1][k].index;
+                        myarr[myarr_index].connect[4] = temp[i][j][k + 1].index;
+                        myarr[myarr_index].connect[5] = temp[i][j][k - 1].index;
                     }
-                    else if(k==z_length-1&&j!=0&&j!=y_length-1&&i!=0&&i!=z_length-1)
+                    else if (k == 0 && j != 0 && j != y_length - 1 && i != 0 && i != z_length - 1)
                     {
                         myarr[myarr_index].connect[0] = temp[i + 1][j][k].index;
-                    myarr[myarr_index].connect[1] = temp[i - 1][j][k].index;
-                    myarr[myarr_index].connect[2] = temp[i][j + 1][k].index;
-                    myarr[myarr_index].connect[3] = temp[i][j - 1][k].index;
-                    myarr[myarr_index].connect[4] =-1;
-                    myarr[myarr_index].connect[5] = temp[i][j][k - 1].index;
+                        myarr[myarr_index].connect[1] = temp[i - 1][j][k].index;
+                        myarr[myarr_index].connect[2] = temp[i][j + 1][k].index;
+                        myarr[myarr_index].connect[3] = temp[i][j - 1][k].index;
+                        myarr[myarr_index].connect[4] = temp[i][j][k + 1].index;
+                        myarr[myarr_index].connect[5] = -1;
+                    }
+                    else if (k == z_length - 1 && j != 0 && j != y_length - 1 && i != 0 && i != z_length - 1)
+                    {
+                        myarr[myarr_index].connect[0] = temp[i + 1][j][k].index;
+                        myarr[myarr_index].connect[1] = temp[i - 1][j][k].index;
+                        myarr[myarr_index].connect[2] = temp[i][j + 1][k].index;
+                        myarr[myarr_index].connect[3] = temp[i][j - 1][k].index;
+                        myarr[myarr_index].connect[4] = -1;
+                        myarr[myarr_index].connect[5] = temp[i][j][k - 1].index;
                     }
                     else
                     {
-                            myarr[myarr_index].connect[0] = temp[i + 1][j][k].index;
-                    myarr[myarr_index].connect[1] = temp[i - 1][j][k].index;
-                    myarr[myarr_index].connect[2] = temp[i][j + 1][k].index;
-                    myarr[myarr_index].connect[3] = temp[i][j - 1][k].index;
-                    myarr[myarr_index].connect[4] =temp[i][j][k +1].index;
-                    myarr[myarr_index].connect[5] = temp[i][j][k - 1].index;
+                        myarr[myarr_index].connect[0] = temp[i + 1][j][k].index;
+                        myarr[myarr_index].connect[1] = temp[i - 1][j][k].index;
+                        myarr[myarr_index].connect[2] = temp[i][j + 1][k].index;
+                        myarr[myarr_index].connect[3] = temp[i][j - 1][k].index;
+                        myarr[myarr_index].connect[4] = temp[i][j][k + 1].index;
+                        myarr[myarr_index].connect[5] = temp[i][j][k - 1].index;
                     }
-                    
                 }
             }
         }
@@ -448,7 +445,7 @@ struct arrcube *fill_arr_of_cube(int x,int y,int z,int myrank,int cube_numb_of_p
 }
 
 //填充发送表
-struct send_table_element * create_send_table(int allrank,int cube_numb_of_pro,process_send_num * con_arr,struct arrcube * myarr)
+struct send_table_element *create_send_table(int allrank, int cube_numb_of_pro, process_send_num *con_arr, arr_cube *myarr)
 {
     struct send_table_element *send_arr = malloc(allrank * sizeof(struct send_table_element));
     for (int i = 0; i < allrank; i++)
@@ -463,8 +460,10 @@ struct send_table_element * create_send_table(int allrank,int cube_numb_of_pro,p
 }
 
 //填充发送表
-void fill_send_table(struct send_table_element * send_arr, struct arrcube *myarr,int cube_numb_of_pro)
+void fill_send_table(struct send_table_element *send_arr, arr_cube *myarr, int cube_numb_of_pro)
 {
+
+
     int pro_numb; //该方块属于的进程号
     for (int i = 0; i < cube_numb_of_pro; ++i)
     {
@@ -474,8 +473,16 @@ void fill_send_table(struct send_table_element * send_arr, struct arrcube *myarr
             //该邻接方块为内部方块
             if (connect_temp != -1)
             {
+
                 double tempar = myarr[i].temp.tempa; //该方块的温度
-                pro_numb = communicator_get_process_num_by_index(connect_temp,cube_numb_of_pro);
+
+                if(connect_temp > cube_numb_of_pro){
+
+                    printf("error\n");
+                }
+
+                pro_numb = communicator_get_process_num_by_index(connect_temp, cube_numb_of_pro);
+
                 send_arr[pro_numb].element[send_arr[pro_numb].current_element_numb].index = myarr[i].temp.index;
                 send_arr[pro_numb].element[send_arr[pro_numb].current_element_numb].tempa = myarr[i].temp.tempa;
                 send_arr[pro_numb].current_element_numb++;
@@ -484,21 +491,20 @@ void fill_send_table(struct send_table_element * send_arr, struct arrcube *myarr
     }
 }
 
-
 //新建MPI_Datatype
 void commit_new_type(MPI_Datatype *MPI_send_element)
 {
     struct send_element send_temp;
     // MPI_Datatype  MPI_send_element;
 
-    MPI_Aint * disp=malloc(2*sizeof(MPI_AINT));
-    const MPI_Aint * disp1=disp;
+    MPI_Aint *disp = malloc(2 * sizeof(MPI_AINT));
+    const MPI_Aint *disp1 = disp;
 
-    const int block1[2]={1,1};
-    const int *block=block1;
+    const int block1[2] = {1, 1};
+    const int *block = block1;
 
     const MPI_Datatype type[2] = {MPI_INT, MPI_DOUBLE};
-    const MPI_Datatype * type1=type;
+    const MPI_Datatype *type1 = type;
     MPI_Get_address(&send_temp.index, &disp[0]);
     MPI_Get_address(&send_temp.tempa, &disp[1]);
     disp[1] = disp[1] - disp[0];
@@ -507,11 +513,10 @@ void commit_new_type(MPI_Datatype *MPI_send_element)
     MPI_Type_commit(MPI_send_element);
 }
 
-
 //通信
-void communication(int allrank,int myrank,int cube_numb_of_pro,struct send_table_element *send_arr,process_send_num *con_arr,MPI_Datatype MPI_send_element)
+void communication(int allrank, int myrank, int cube_numb_of_pro, struct send_table_element *send_arr, process_send_num *con_arr, MPI_Datatype MPI_send_element, HashMap *index_temp_table)
 {
-       for (int i = 0; i < allrank; i++)
+    for (int i = 0; i < allrank; i++)
     {
         if (myrank == i) //轮到第i号进程发送数据
         {
@@ -530,15 +535,20 @@ void communication(int allrank,int myrank,int cube_numb_of_pro,struct send_table
             MPI_Recv(recv, con_arr[i].send_num, MPI_send_element, i, i, MPI_COMM_WORLD, &status);
             //更新index-table
             //******待完成
+
+            // for (int i = 0; i < con_arr[i].send_num; i++)
+            // {
+            //     *(double *)HashMap_get(index_temp_table, &recv[i].index) = recv[i].tempa;
+            // }
+
             //index-table更新完毕
-            int numb;//此次通信获取的MPI_send_element的数量
-            MPI_Get_count(&status,MPI_send_element,&numb);
+            int numb; //此次通信获取的MPI_send_element的数量
+            MPI_Get_count(&status, MPI_send_element, &numb);
             // printf("%d\n",numb);
             // if(numb!=0)
             // printf("process:%d\n%d\n%f\n",myrank,recv[1].index,recv[1].tempa);
             free(recv);
         }
         MPI_Barrier(MPI_COMM_WORLD);
-        
     }
 }

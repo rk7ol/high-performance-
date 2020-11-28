@@ -1,4 +1,6 @@
-#include"test.h"
+#include "test.h"
+#include "heat_conduct.h"
+#include "communicator.h"
 
 int main(int argc, char **argv)
 {
@@ -26,14 +28,13 @@ int main(int argc, char **argv)
     MPI_Comm_rank(MPI_COMM_WORLD, &myrank);
     //2
 
-    int cube_numb_of_pro ;
-    cube_numb_of_pro= temp_index / allrank;
+    int cube_numb_of_pro;
+    cube_numb_of_pro = temp_index / allrank;
 
-    struct arrcube *myarr = fill_arr_of_cube(x_length, y_length, z_length, myrank, cube_numb_of_pro, temp);
+    arr_cube *myarr = fill_arr_of_cube(x_length, y_length, z_length, myrank, cube_numb_of_pro, temp);
     //2
 
     //end
-
 
     // for(int i=0;i<allrank;i++)
     // {
@@ -55,7 +56,7 @@ int main(int argc, char **argv)
     // }
 
     //3
- 
+
     MPI_Datatype MPI_send_element;
     commit_new_type(&MPI_send_element);
 
@@ -65,14 +66,61 @@ int main(int argc, char **argv)
 
     struct send_table_element *send_arr = create_send_table(allrank, cube_numb_of_pro, con_arr, myarr);
 
-    fill_send_table(send_arr,myarr,cube_numb_of_pro);
-    //3
+    double delta = 0;
 
- 
-    //4
-    communication(allrank, myrank, cube_numb_of_pro, send_arr, con_arr, MPI_send_element);
-    //4
-    
+    HashMap index_temp_table = heat_conduct_create_index_temp_table(myarr, cube_numb_of_pro);
+
+    do
+    {
+
+        //delta = 100;
+
+        delta = heat_conduct_play(myarr, cube_numb_of_pro, &index_temp_table);
+
+        // for (int i = 0; i < allrank; i++)
+        // {
+        //     if (myrank == i)
+        //     {
+        //         printf("proess:%d\n", myrank);
+        //         for (int i = 120; i < 160; i++)
+        //         {
+        //             printf("index:%d\n", myarr[i].temp.index);
+        //             printf("connect:\n");
+        //             for (int j = 0; j < 6; j++)
+        //             {
+        //                 printf("%d ", myarr[i].connect[j]);
+        //                 if (myarr[i].connect[j] > cube_numb_of_pro)
+        //                 {
+        //                     exit(EXIT_FAILURE);
+        //                 }
+
+        //             }
+        //             printf("\n");
+        //         }
+        //     }
+        //     //sleep(2);
+        // }
+
+        fill_send_table(send_arr, myarr, cube_numb_of_pro);
+        //3
+
+        //4
+        communication(allrank, myrank, cube_numb_of_pro, send_arr, con_arr, MPI_send_element, &index_temp_table);
+        //4
+
+        // for (int i = 0; i < cube_numb_of_pro; i++)
+        // {
+        //     double *value = (double *)HashMap_get(&index_temp_table, &i);
+
+        //     if (value != NULL)
+        //     {
+        //         printf("after comm indeex:%i, temp: %f\n", i, *value);
+        //     }
+        // }
+        printf("delata:%f\n", delta);
+
+    } while (!heat_conduct_isDone(delta));
+
     MPI_Finalize();
     return 0;
 }

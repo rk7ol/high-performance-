@@ -118,6 +118,15 @@ void *HashMap_get(const HashMap *hashMap, const void *key)
     LinkedList *buket = getBucket(hashMap, pair.key);
     LinkedListNode *node = LinkedList_search(buket, &pair);
 
+    if (node == NULL)
+    {
+        return NULL;
+    }
+    
+
+
+    int value = *(int*)key;
+
     return (void *)((Pair *)node->content)->content;
 }
 

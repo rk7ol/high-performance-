@@ -4,6 +4,7 @@ double env_temp = 25.0;
 
 int hash_getInt(const void *content)
 {
+    int key = *(int *)content;
     return *(int *)content;
 }
 
@@ -12,20 +13,39 @@ HashMap heat_conduct_create_index_temp_table(arr_cube *arr_cube, const size_t ar
 
     HashMap index_temp_table = HashMap_create(&hash_getInt, sizeof(int), 0.75);
 
-    for (size_t i = 0; i < arr_cube_length; i++)
+    for (int i = 0; i < arr_cube_length; i++)
     {
         double *temp = malloc(sizeof(double));
         *temp = arr_cube[i].temp.tempa;
         HashMap_put(&index_temp_table, &arr_cube[i].temp.index, temp);
+
+        // for (int i = 0; i < 10; i++)
+        // {
+
+        //     int *index = malloc(sizeof(int));
+        //     *index = i;
+        //     double *value = (double *)HashMap_get(&index_temp_table, index);
+
+        //     if (value != NULL)
+        //     {
+        //         printf("indeex:%i, temp: %f\n", i, *value);
+        //     }
+        // }
     }
 
     return index_temp_table;
 }
 
-void heat_conduct_play(arr_cube *arr_cube, const size_t arr_cube_length, HashMap *index_temp_table)
+
+
+double heat_conduct_play(arr_cube *arr_cube, const size_t arr_cube_length, HashMap *index_temp_table)
 {
 
-    HashMap new_index_temp_table = HashMap_create(&hash_getInt, sizeof(int), 0.75);
+    double max_change = 0;
+
+    //HashMap new_index_temp_table = HashMap_create(&hash_getInt, sizeof(int), 0.75);
+
+    LinkedList result = LinkedList_create(NULL);
 
     for (size_t i = 0; i < arr_cube_length; i++)
     {
@@ -35,9 +55,9 @@ void heat_conduct_play(arr_cube *arr_cube, const size_t arr_cube_length, HashMap
         //sum of connect cube temperature
         for (size_t j = 0; j < 6; j++)
         {
-            if (arr_cube[i].connect[i] != -1)
+            if (arr_cube[i].connect[j] != -1)
             {
-                *temp_sum += *(double *)HashMap_get(index_temp_table, &arr_cube[i].connect[i]);
+                *temp_sum += *(double *)HashMap_get(index_temp_table, &arr_cube[i].connect[j]);
             }
             else
             {
@@ -45,14 +65,95 @@ void heat_conduct_play(arr_cube *arr_cube, const size_t arr_cube_length, HashMap
             }
         }
 
+        *temp_sum = *temp_sum / 6;
+
+
+
+
+        //printf("%f - %f\n", arr_cube[i].temp.tempa, *temp_sum);
+
+        double delta = arr_cube[i].temp.tempa - *temp_sum;
+
+        if (delta < 0)
+        {
+            delta = -delta;
+        }
+
+        if (delta > max_change)
+        {
+            max_change = delta;
+        }
+
         //update cube temp
-        arr_cube->temp.tempa = *temp_sum;
+        arr_cube[i].temp.tempa = *temp_sum;
 
         //put into new index-temp table
-        HashMap_put(&index_temp_table, &arr_cube[i].temp.index, temp_sum);
+        //HashMap_put(&new_index_temp_table, &arr_cube[i].temp.index, temp_sum);
+
+        send_element *s = malloc(sizeof(send_element));
+
+        s->index = arr_cube[i].temp.index;
+        s->tempa = *temp_sum;
+
+        LinkedList_add(&result, s);
     }
 
-    HashMap_destroy(index_temp_table);
 
-    index_temp_table = &new_index_temp_table;
+
+    LinkedListNode *head = result.headNode;
+
+
+    while (head != NULL)
+    {
+        int index = ((send_element*)head->content)->index;
+        double *value = (double*)HashMap_get(index_temp_table, &index);
+
+        double new_value = ((send_element*)head->content)->tempa;
+
+        if(value != NULL){
+            *value = new_value;
+        }
+
+
+        head = head->next;
+    }
+    
+
+
+    
+
+    
+
+
+
+
+
+    // for (size_t i = 0; i < arr_cube_length; i++){
+
+    //         HashMap_get(index_temp_table, arr_cube[i])
+
+    // }
+
+
+
+
+
+    //HashMap_destroy(index_temp_table);
+
+    //index_temp_table = &new_index_temp_table;
+
+    return max_change;
+}
+
+int heat_conduct_isDone(double value)
+{
+
+    if (value < 0.001)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
 }
