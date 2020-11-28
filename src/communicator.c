@@ -25,7 +25,7 @@ process_send_num *communicator_get_process_send_num_list(const arr_cube *arr_cub
             if (arr_cube[i].connect[j] != -1)
             {
                 //find neighber block index
-                int proces_num = communicator_get_process_num_by_index(arr_cube[i].connect[j]);
+                int proces_num = communicator_get_process_num_by_index(arr_cube[i].connect[j],size);
                 result[proces_num].send_num++;
             }
         }
@@ -47,7 +47,7 @@ int communicator_get_process_num_by_index(int index, int cube_numb)
 }
 
 //返回相邻方块数目
-process_send_num *communicator_get_process_send_num_list(const struct arrcube *arr_cube, const size_t size, const size_t process_size)
+process_send_num *communicator_get_process_send_num_list(const struct arr_cube *arr_cube, const size_t size, const size_t process_size)
 {
      //initialize
     process_send_num *result = malloc(sizeof(process_send_num) * process_size);
