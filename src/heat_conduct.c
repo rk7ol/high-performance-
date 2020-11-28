@@ -151,7 +151,7 @@ double heat_conduct_play(arr_cube *arr_cube, const size_t arr_cube_length, HashM
 int heat_conduct_isDone(double value)
 {
 
-    if (value < 0.001)
+    if (value < 1)
     {
         return 1;
     }
