@@ -7,10 +7,8 @@
 #include "cHashMap.h"
 #include"mpi.h"
 #include <stdio.h>
-#define x_length 2
-#define y_length 2
-#define z_length 2
 
+int x_length,y_length,z_length;
 struct cube
 {
     int x;
@@ -99,9 +97,11 @@ typedef struct process_send_num process_send_num;
 
 
 
-
 //创建三维数组
 extern int ***create_three_dimen_arr(int m,int n,int t);
+
+//填充01三维数组
+extern void fill_01_arr(int *** arr,char * pathname);
 
 //创建三维结构体数组
 extern struct cube*** create_three_dimen_struct_cube(int m,int n,int t);

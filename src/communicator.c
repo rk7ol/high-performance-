@@ -1,5 +1,51 @@
 #include "communicator.h"
 
+void fill_01_arr(int *** a,char * pathname)
+{
+   char * filepath="/home/dx123/data_fixed02";
+    FILE* fp = fopen(filepath, "r");
+    if (!fp) return -1;
+    fseek(fp, 0L, SEEK_END);
+    int size = ftell(fp);
+    fclose(fp);
+    int cube_size=(size/4-3)/3;
+    FILE* input = fopen(filepath, "rb");
+    if (input == NULL) {
+        printf("无法打开文件");
+        exit(0);
+    }
+    fread(&x_length, sizeof(int), 1/*读取1个数据项*/, input);
+    fread(&y_length, sizeof(int), 1/*读取1个数据项*/, input);
+    fread(&z_length, sizeof(int), 1/*读取1个数据项*/, input);
+    x_length=x_length>> 24;
+    y_length=y_length>> 24;
+    z_length=z_length>> 24;
+    for (int i = 0; i < x_length; i++)
+        for (int j = 0; j < y_length; j++)
+            for (int k = 0; k < z_length; k++)
+                {
+                    *(*(*(a + i) + j) + k) = 0;
+                }
+
+                
+    int temp_x, temp_y, temp_z;//临时坐标
+    for (int i = 0; i < cube_size; i++)
+    {
+        fread(&temp_x, sizeof(int), 1, input);
+        fread(&temp_y, sizeof(int), 1, input);
+        fread(&temp_z, sizeof(int), 1, input);
+        temp_x = temp_x >> 24;
+        temp_y = temp_y >> 24;
+        temp_z = temp_z >> 24;
+        a[temp_x-1][temp_y-1][temp_z-1] = 1;
+
+    }
+}
+
+
+
+
+
 process_send_num *communicator_get_process_send_num_list(const arr_cube *arr_cube, const size_t size, const size_t process_size)
 {
 
