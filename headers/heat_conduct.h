@@ -27,7 +27,7 @@ extern HashMap heat_conduct_create_index_temp_table(arr_cube* arr_cube, const si
  * @param index_temp_table 
  * @return double 
  */
-extern double heat_conduct_play(arr_cube* arr_cube, const size_t arr_cube_length, HashMap* index_temp_table);
+extern double heat_conduct_play(arr_cube* arr_cube, const size_t arr_cube_length, HashMap* index_temp_table, int rank);
 
 
 

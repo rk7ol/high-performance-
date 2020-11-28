@@ -476,11 +476,6 @@ void fill_send_table(struct send_table_element *send_arr, arr_cube *myarr, int c
 
                 double tempar = myarr[i].temp.tempa; //该方块的温度
 
-                if(connect_temp > cube_numb_of_pro){
-
-                    printf("error\n");
-                }
-
                 pro_numb = communicator_get_process_num_by_index(connect_temp, cube_numb_of_pro);
 
                 send_arr[pro_numb].element[send_arr[pro_numb].current_element_numb].index = myarr[i].temp.index;

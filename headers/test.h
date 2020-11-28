@@ -8,9 +8,9 @@
 #ifndef _TEST_H  
 #define _TEST_H
 
-#define x_length 16
-#define y_length 16
-#define z_length 16
+#define x_length 4
+#define y_length 4
+#define z_length 4
 
 
 

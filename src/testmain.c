@@ -70,12 +70,51 @@ int main(int argc, char **argv)
 
     HashMap index_temp_table = heat_conduct_create_index_temp_table(myarr, cube_numb_of_pro);
 
+    // for (size_t i = 0; i < cube_numb_of_pro; i++)
+    // {
+    //     printf("[rank: %d]-element: <%d>\n--content:", myrank, myarr[i].temp.index);
+    //     for (size_t j = 0; j < 6; j++)
+    //     {
+    //        printf(" %d",  myarr[i].connect[j]);
+    //     }
+
+    //     printf("\n");
+    // }
+
+    //show index-temp table
+
+    for (size_t i = 0; i < cube_numb_of_pro; i++)
+    {
+
+        for (size_t j = 0; j < 6; j++)
+        {
+
+            if (myarr[i].connect[j] != -1)
+            {
+                double *value = HashMap_get(&index_temp_table, &(myarr[i].connect[j]));
+
+                if (value != NULL)
+                {
+
+                    printf("[rank: %d],element: <%d>,content: <%f>\n", myrank, myarr[i].connect[j], *value);
+                }
+                else
+                {
+
+                    printf("[rank: %d],element: <%d>,content: <not found>\n", myrank, myarr[i].connect[j]);
+                }
+            }
+        }
+    }
+
     do
     {
 
         //delta = 100;
+        printf("play start\n");
+        delta = heat_conduct_play(myarr, cube_numb_of_pro, &index_temp_table, myrank);
 
-        delta = heat_conduct_play(myarr, cube_numb_of_pro, &index_temp_table);
+        printf("play finish\n");
 
         // for (int i = 0; i < allrank; i++)
         // {
