@@ -463,7 +463,7 @@ struct send_table_element * create_send_table(int allrank,int cube_numb_of_pro,p
 }
 
 //填充发送表
-void fill_send_table(struct send_table_element * send_arr, struct arrcube *myarr,int cube_numb_of_pro)
+void fill_send_table(struct send_table_element * send_arr, struct arrcube *myarr,int cube_numb_of_pro,int allrank)
 {
     int pro_numb; //该方块属于的进程号
     for (int i = 0; i < cube_numb_of_pro; ++i)
@@ -478,11 +478,12 @@ void fill_send_table(struct send_table_element * send_arr, struct arrcube *myarr
                 pro_numb = communicator_get_process_num_by_index(connect_temp,cube_numb_of_pro);
                 send_arr[pro_numb].element[send_arr[pro_numb].current_element_numb].index = myarr[i].temp.index;
                 send_arr[pro_numb].element[send_arr[pro_numb].current_element_numb].tempa = myarr[i].temp.tempa;
-                if(send_arr[pro_numb].current_element_numb<send_arr[pro_numb].element_numb)
                 send_arr[pro_numb].current_element_numb++;
             }
         }
     }
+    for(int i=0;i<allrank;i++)
+    send_arr[i].current_element_numb=0;
 }
 
 

@@ -65,7 +65,7 @@ int main(int argc, char **argv)
 
     struct send_table_element *send_arr = create_send_table(allrank, cube_numb_of_pro, con_arr, myarr);
 
-    fill_send_table(send_arr,myarr,cube_numb_of_pro);
+    fill_send_table(send_arr,myarr,cube_numb_of_pro,allrank);
     //3
 
  
