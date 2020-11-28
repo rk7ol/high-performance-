@@ -1,6 +1,10 @@
 #vs code
 .vscode/*
 
+#IDEA
+.idea/*
+src/test/*
+
 out/*
 target/*
 test/*
