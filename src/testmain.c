@@ -111,10 +111,10 @@ int main(int argc, char **argv)
     {
 
         //delta = 100;
-        printf("play start\n");
+        printf("rank:[%d] play start\n", myrank);
         delta = heat_conduct_play(myarr, cube_numb_of_pro, &index_temp_table, myrank);
 
-        printf("play finish\n");
+        printf("rank:[%d]play finish\n", myrank);
 
         // for (int i = 0; i < allrank; i++)
         // {
@@ -140,7 +140,7 @@ int main(int argc, char **argv)
         //     //sleep(2);
         // }
 
-        fill_send_table(send_arr, myarr, cube_numb_of_pro);
+        fill_send_table(send_arr, myarr, cube_numb_of_pro, allrank);
         //3
 
         //4
@@ -160,6 +160,9 @@ int main(int argc, char **argv)
 
     } while (!heat_conduct_isDone(delta));
 
+    printf("done\n");
+
     MPI_Finalize();
+
     return 0;
 }

@@ -460,7 +460,7 @@ struct send_table_element *create_send_table(int allrank, int cube_numb_of_pro, 
 }
 
 //填充发送表
-void fill_send_table(struct send_table_element *send_arr, arr_cube *myarr, int cube_numb_of_pro)
+void fill_send_table(struct send_table_element * send_arr, arr_cube *myarr,int cube_numb_of_pro,int allrank)
 {
 
 
@@ -480,11 +480,12 @@ void fill_send_table(struct send_table_element *send_arr, arr_cube *myarr, int c
 
                 send_arr[pro_numb].element[send_arr[pro_numb].current_element_numb].index = myarr[i].temp.index;
                 send_arr[pro_numb].element[send_arr[pro_numb].current_element_numb].tempa = myarr[i].temp.tempa;
-                if(send_arr[pro_numb].current_element_numb<send_arr[pro_numb].element_numb)
                 send_arr[pro_numb].current_element_numb++;
             }
         }
     }
+    for(int i=0;i<allrank;i++)
+    send_arr[i].current_element_numb=0;
 }
 
 //新建MPI_Datatype

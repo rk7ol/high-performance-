@@ -8,9 +8,9 @@
 #ifndef _TEST_H  
 #define _TEST_H
 
-#define x_length 4
-#define y_length 4
-#define z_length 4
+#define x_length 16
+#define y_length 16
+#define z_length 16
 
 
 
@@ -73,7 +73,7 @@ extern arr_cube *fill_arr_of_cube(int x,int y,int z,int myrank,int cube_numb_of_
 extern struct send_table_element * create_send_table(int allrank,int cube_numb_of_pro,process_send_num * con_arr,arr_cube * myarr);
 
 //填充发送表
-extern void fill_send_table(struct send_table_element * send_arr, arr_cube *myarr,int cube_numb_of_pro);
+extern void fill_send_table(struct send_table_element * send_arr, arr_cube *myarr,int cube_numb_of_pro,int allrank);
 
 //新建MPI_Datatype
 extern void commit_new_type(MPI_Datatype *MPI_send_element);

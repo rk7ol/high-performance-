@@ -102,7 +102,7 @@ double heat_conduct_play(arr_cube *arr_cube, const size_t arr_cube_length, HashM
             max_change = delta;
         }
 
-        printf("rank [%d], index: <%d>, temp<%f>to<%f>\n", rank, arr_cube[i].temp.index, arr_cube[i].temp.tempa, *temp_sum);
+       // printf("rank [%d], index: <%d>, temp<%f>to<%f>\n", rank, arr_cube[i].temp.index, arr_cube[i].temp.tempa, *temp_sum);
 
         //update cube temp
         arr_cube[i].temp.tempa = *temp_sum;
