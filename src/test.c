@@ -485,6 +485,7 @@ void fill_send_table(struct send_table_element *send_arr, arr_cube *myarr, int c
 
                 send_arr[pro_numb].element[send_arr[pro_numb].current_element_numb].index = myarr[i].temp.index;
                 send_arr[pro_numb].element[send_arr[pro_numb].current_element_numb].tempa = myarr[i].temp.tempa;
+                if(send_arr[pro_numb].current_element_numb<send_arr[pro_numb].element_numb)
                 send_arr[pro_numb].current_element_numb++;
             }
         }
