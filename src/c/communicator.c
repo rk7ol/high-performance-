@@ -1,7 +1,8 @@
 #include "communicator.h"
 
-void fill_01_arr(int *** a,char * pathname)
+int *** fill_01_arr(char * pathname)
 {
+    int ***a;
    char * filepath="/home/dx123/data_fixed02";
     FILE* fp = fopen(filepath, "r");
     if (!fp) return -1;
@@ -20,6 +21,8 @@ void fill_01_arr(int *** a,char * pathname)
     x_length=x_length>> 24;
     y_length=y_length>> 24;
     z_length=z_length>> 24;
+
+    a=create_three_dimen_arr(x_length,y_length,z_length);
     for (int i = 0; i < x_length; i++)
         for (int j = 0; j < y_length; j++)
             for (int k = 0; k < z_length; k++)
@@ -40,6 +43,7 @@ void fill_01_arr(int *** a,char * pathname)
         a[temp_x-1][temp_y-1][temp_z-1] = 1;
 
     }
+    return a;
 }
 
 
