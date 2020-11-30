@@ -1,7 +1,7 @@
 GCCARG = -g
 
 HEADFILESPATH = -Iheaders -I${JAVA_HOME}/include -I${JAVA_HOME}/include/linux
-VPATH = src:headers:out
+VPATH = src/c:headers:out
 
 #dir
 OBJDIR = out
