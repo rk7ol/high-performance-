@@ -1,9 +1,6 @@
 #pragma once
 
-
 #include <stdlib.h>
-
-
 
 #ifndef _CLINKEDLIST_H_
 #define _CLINKEDLIST_H_
@@ -66,7 +63,7 @@ extern LinkedList LinkedList_create(int (*comparter)(const void *contentA, const
  * @param content 
  * @return LinkedListNode 
  */
-extern LinkedListNode* LinkedListNode_create(const void *content);
+extern LinkedListNode *LinkedListNode_create(const void *content);
 
 /**
  * @brief search node by content
@@ -76,8 +73,6 @@ extern LinkedListNode* LinkedListNode_create(const void *content);
  */
 extern LinkedListNode *LinkedList_search(const LinkedList *linkedList, const void *content);
 
-
-
 /**
  * @brief get element by index
  * 
@@ -85,7 +80,7 @@ extern LinkedListNode *LinkedList_search(const LinkedList *linkedList, const voi
  * @param index 
  * @return char* 
  */
-extern char* LinkedList_getByIndex(const LinkedList *linkedList, const int index);
+extern char *LinkedList_getByIndex(const LinkedList *linkedList, const int index);
 
 /**
  * @brief add a node with content to the end of the linkedList

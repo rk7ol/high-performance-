@@ -3,6 +3,10 @@
   "name": "Point",
   "fields": [
     {
+      "name" : "round",
+      "type" : "long"
+    },
+    {
       "name": "coord_x",
       "type": "int"
     },

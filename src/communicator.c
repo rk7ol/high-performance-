@@ -213,6 +213,7 @@ struct cube ***create_three_dimen_struct_cube(int m, int n, int t)
 //填充三维结构体数组
 int fill_arr(struct cube ***temp, int ***arr)
 {
+
     int temp_index = 1;
     double temp_tempa = 1.0;
     for (int i = 0; i < x_length; i++)
@@ -229,7 +230,7 @@ int fill_arr(struct cube ***temp, int ***arr)
                     temp[i][j][k].y = j;
                     temp[i][j][k].z = k;
                     temp[i][j][k].index = temp_index;
-                    temp[i][j][k].tempa = temp_tempa;
+                    (&temp[i][j][k])->tempa = 10000;
                     ++temp_index;
                     temp_tempa += 1.0;
                 }
@@ -248,6 +249,7 @@ int fill_arr(struct cube ***temp, int ***arr)
     }
     return temp_index - 1;
 }
+
 
 //填充二维数组
 struct arr_cube *fill_arr_of_cube(int x, int y, int z, int myrank, int cube_numb_of_pro, struct cube ***temp)

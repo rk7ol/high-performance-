@@ -107,7 +107,7 @@ extern void fill_01_arr(int *** arr,char * pathname);
 extern struct cube*** create_three_dimen_struct_cube(int m,int n,int t);
 
 //填充三维结构体数组
-extern int fill_arr(struct cube *** temp,int ***arr);
+extern int fill_arr(struct cube ***temp, int  ***arr);
 
 //填充二维数组
 extern struct arr_cube *fill_arr_of_cube(int x,int y,int z,int myrank,int cube_numb_of_pro,struct cube *** temp);
