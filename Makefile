@@ -1,7 +1,7 @@
 GCCARG = -g
 
 HEADFILESPATH = headers
-VPATH = src:headers:out
+VPATH = src/c:headers:out
 
 #dir
 OBJDIR = out
