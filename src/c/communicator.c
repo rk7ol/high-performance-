@@ -1,7 +1,8 @@
 #include "communicator.h"
 
-void fill_01_arr(int *** a,char * pathname)
+int *** fill_01_arr(char * pathname)
 {
+    int ***a;
    char * filepath="/home/dx123/data_fixed02";
     FILE* fp = fopen(filepath, "r");
     if (!fp) return -1;
@@ -20,6 +21,8 @@ void fill_01_arr(int *** a,char * pathname)
     x_length=x_length>> 24;
     y_length=y_length>> 24;
     z_length=z_length>> 24;
+
+    a=create_three_dimen_arr(x_length,y_length,z_length);
     for (int i = 0; i < x_length; i++)
         for (int j = 0; j < y_length; j++)
             for (int k = 0; k < z_length; k++)
@@ -40,6 +43,7 @@ void fill_01_arr(int *** a,char * pathname)
         a[temp_x-1][temp_y-1][temp_z-1] = 1;
 
     }
+    return a;
 }
 
 
@@ -213,6 +217,7 @@ struct cube ***create_three_dimen_struct_cube(int m, int n, int t)
 //填充三维结构体数组
 int fill_arr(struct cube ***temp, int ***arr)
 {
+
     int temp_index = 1;
     double temp_tempa = 1.0;
     for (int i = 0; i < x_length; i++)
@@ -229,7 +234,7 @@ int fill_arr(struct cube ***temp, int ***arr)
                     temp[i][j][k].y = j;
                     temp[i][j][k].z = k;
                     temp[i][j][k].index = temp_index;
-                    temp[i][j][k].tempa = temp_tempa;
+                    (&temp[i][j][k])->tempa = 10000;
                     ++temp_index;
                     temp_tempa += 1.0;
                 }
@@ -248,6 +253,7 @@ int fill_arr(struct cube ***temp, int ***arr)
     }
     return temp_index - 1;
 }
+
 
 //填充二维数组
 struct arr_cube *fill_arr_of_cube(int x, int y, int z, int myrank, int cube_numb_of_pro, struct cube ***temp)
