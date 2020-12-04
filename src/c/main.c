@@ -19,7 +19,7 @@ void send_message(char *schemaFilePath, arr_cube *send_buffer, int send_number, 
 
     avro_serializer serializer = avro_serializer_create(schemaFilePath, 819600);
 
-    kafka_producer producer = kafka_producer_initilize("dodlee.cn:9092");
+    kafka_producer producer = kafka_producer_initilize("192.168.3.11:9092");
 
     for (int i = 0; i < send_number; i++)
     {
