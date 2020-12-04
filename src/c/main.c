@@ -66,26 +66,26 @@ int main(int argc, char *argv[])
 
     int result[x_length][y_length][z_length];
 
-    // if (myrank == 0)
-    // {
-
-    //     fid = open(fifo_name, O_RDONLY);
-
-    //     read(fid, &result, sizeof(int) * x_length * y_length * z_length);
-    //     close(fid);
-    // }
-
-    for (size_t i = 0; i < x_length; i++)
+    if (myrank == 0)
     {
 
-        for (size_t j = 0; j < y_length; j++)
-        {
-            for (size_t k = 0; k < z_length; k++)
-            {
-                result[i][j][k] = 1;
-            }
-        }
+        fid = open(fifo_name, O_RDONLY);
+
+        read(fid, &result, sizeof(int) * x_length * y_length * z_length);
+        close(fid);
     }
+
+    // for (size_t i = 0; i < x_length; i++)
+    // {
+
+    //     for (size_t j = 0; j < y_length; j++)
+    //     {
+    //         for (size_t k = 0; k < z_length; k++)
+    //         {
+    //             result[i][j][k] = 1;
+    //         }
+    //     }
+    // }
 
     MPI_Bcast(&result, x_length * y_length * z_length, MPI_INT, 0, MPI_COMM_WORLD);
 

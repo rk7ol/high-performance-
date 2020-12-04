@@ -8,7 +8,7 @@ OBJDIR = out
 TARGETDIR = target
 
 
-OBJS = main.o cLinkedList.o cHashMap.o cArrayList.o avro_serializer.o kafka_producer.o base64.o communicator.o heat_conduct.o native_implement_Invoker.o utils.o
+OBJS = main.o cLinkedList.o cHashMap.o cArrayList.o avro_serializer.o kafka_producer.o base64.o communicator.o heat_conduct.o HighPerformanceHC_native_implement_Invoker.o utils.o
 TARGET_LIBRARY = libHP.so
 TARGET_EXEC = HP
 OBJOUT = $(patsubst %,$(OBJDIR)/%,$(OBJS))

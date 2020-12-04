@@ -1,4 +1,4 @@
-#include "native_implement_Invoker.h"
+#include "HighPerformanceHC_native_implement_Invoker.h"
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -10,7 +10,7 @@
 
 #include "utils.h"
 
-JNIEXPORT void JNICALL Java_native_1implement_Invoker_InvokeMPIHeatConduct(JNIEnv *env, jobject obj, jstring exec_path, jint x_size, jint y_size, jint z_size, jobjectArray value, jint process_number)
+JNIEXPORT void JNICALL Java_HighPerformanceHC_native_1implement_Invoker_InvokeMPIHeatConduct(JNIEnv *env, jobject obj, jstring exec_path, jint x_size, jint y_size, jint z_size, jobjectArray value, jint process_number)
 {
 
     pid_t pid;
@@ -18,14 +18,14 @@ JNIEXPORT void JNICALL Java_native_1implement_Invoker_InvokeMPIHeatConduct(JNIEn
     const char *fifo_name = "tmp";
     int fid;
 
-   // if (access(fifo_name, F_OK) == -1)
-   // {
+   if (access(fifo_name, F_OK) == -1)
+   {
         if (mkfifo(fifo_name, 0644) != 0)
         {
             fprintf(stderr, "Could not create fifo %s\n", fifo_name);
            // return;
         }
-   // }
+   }
 
     pid = fork();
 
@@ -91,6 +91,8 @@ JNIEXPORT void JNICALL Java_native_1implement_Invoker_InvokeMPIHeatConduct(JNIEn
     args[6] = int2string(y_size);
 
     args[7] = int2string(z_size);
+
+    args[8] = NULL;
 
     if (execvp("mpirun", args) == -1)
     {
