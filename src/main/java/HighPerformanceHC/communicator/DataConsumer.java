@@ -17,12 +17,13 @@ public class DataConsumer {
     private final AvroDeserializer deserializer;
     private List<String> topicList;
 
+
     public DataConsumer(AvroDeserializer deserializer) {
 
         this.deserializer = deserializer;
 
         Properties props = new Properties();
-        props.setProperty("bootstrap.servers", "dodlee.cn:9092");
+        props.setProperty("bootstrap.servers", "192.168.3.11:9092");
         props.setProperty("group.id", "1");
         props.setProperty("enable.auto.commit", "false");
         props.setProperty("auto.commit.interval.ms", "100");

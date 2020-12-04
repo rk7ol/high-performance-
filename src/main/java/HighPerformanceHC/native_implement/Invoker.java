@@ -48,7 +48,7 @@ public class Invoker {
         System.out.println("result size:" + result.length);
 
 
-        new Invoker().InvokeMPIHeatConduct("./target/HP", x, y, z, result, 4);
+        new Invoker().InvokeMPIHeatConduct("HP", x, y, z, result, 4);
         System.out.println("finish");
     }
 

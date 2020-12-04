@@ -1,6 +1,7 @@
 package HighPerformanceHC;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -21,6 +22,14 @@ public class MainApp extends Application {
         Scene scene = new Scene(pane);
 
         primaryStage.setScene(scene);
+
+        primaryStage.setTitle("high performance computing course design");
+        primaryStage.setOnCloseRequest(event -> {
+            Platform.exit();
+            System.exit(0);
+        });
+
+
 
         primaryStage.show();
 

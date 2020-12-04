@@ -5,7 +5,7 @@ int *** fill_01_arr(char * pathname)
     int ***a;
    char * filepath="/home/dx123/data_fixed02";
     FILE* fp = fopen(filepath, "r");
-    if (!fp) return -1;
+    if (!fp) return 0;
     fseek(fp, 0L, SEEK_END);
     int size = ftell(fp);
     fclose(fp);
@@ -234,7 +234,7 @@ int fill_arr(struct cube ***temp, int ***arr)
                     temp[i][j][k].y = j;
                     temp[i][j][k].z = k;
                     temp[i][j][k].index = temp_index;
-                    (&temp[i][j][k])->tempa = 10000;
+                    temp[i][j][k].tempa = 1000;
                     ++temp_index;
                     temp_tempa += 1.0;
                 }

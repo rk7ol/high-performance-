@@ -24,7 +24,7 @@ $(TARGET_LIBRARY) : $(OBJS)
 
 $(TARGET_EXEC) : $(OBJS)
 	@mkdir -p $(TARGETDIR) || true
-	gcc  -o $(TARGETDIR)/$(TARGET_EXEC) $(OBJOUT)
+	gcc  -o $(TARGETDIR)/$(TARGET_EXEC) $(OBJOUT) -lavro -lrdkafka -lmpi
 
 $(OBJS) : %.o : %.c
 	@mkdir -p $(OBJDIR) || true
