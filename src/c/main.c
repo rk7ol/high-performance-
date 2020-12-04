@@ -14,7 +14,7 @@
 *
 */
 
-void send_message_example(char *schemaFilePath, arr_cube *send_buffer, int send_number, long round)
+void send_message(char *schemaFilePath, arr_cube *send_buffer, int send_number, long round)
 {
 
     avro_serializer serializer = avro_serializer_create(schemaFilePath, 819600);
@@ -23,6 +23,10 @@ void send_message_example(char *schemaFilePath, arr_cube *send_buffer, int send_
 
     for (int i = 0; i < send_number; i++)
     {
+        if (send_buffer[i].temp.index == 0)
+        {
+            continue;
+        }
         avro_value_t record = avro_serializer_createRecord(&serializer);
 
         avro_record_set_long(&record, "round", round);
@@ -62,26 +66,26 @@ int main(int argc, char *argv[])
 
     int result[x_length][y_length][z_length];
 
-    if (myrank == 0)
-    {
-
-        fid = open(fifo_name, O_RDONLY);
-
-        read(fid, &result, sizeof(int) * x_length * y_length * z_length);
-        close(fid);
-    }
-
-    // for (size_t i = 0; i < x_length; i++)
+    // if (myrank == 0)
     // {
 
-    //     for (size_t j = 0; j < y_length; j++)
-    //     {
-    //         for (size_t k = 0; k < z_length; k++)
-    //         {
-    //             result[i][j][k] = 1;
-    //         }
-    //     }
+    //     fid = open(fifo_name, O_RDONLY);
+
+    //     read(fid, &result, sizeof(int) * x_length * y_length * z_length);
+    //     close(fid);
     // }
+
+    for (size_t i = 0; i < x_length; i++)
+    {
+
+        for (size_t j = 0; j < y_length; j++)
+        {
+            for (size_t k = 0; k < z_length; k++)
+            {
+                result[i][j][k] = 1;
+            }
+        }
+    }
 
     MPI_Bcast(&result, x_length * y_length * z_length, MPI_INT, 0, MPI_COMM_WORLD);
 
@@ -106,7 +110,14 @@ int main(int argc, char *argv[])
     int cube_numb_of_pro;
 
     cube_numb_of_pro = temp_index / allrank;
-    printf("index numb:%d\n",temp_index);
+
+    if (temp_index % allrank != 0)
+    {
+        cube_numb_of_pro++;
+    }
+
+    printf("index numb:%d\n", temp_index);
+
     //return 0;
     arr_cube *myarr = fill_arr_of_cube(x_length, y_length, z_length, myrank, cube_numb_of_pro, temp);
 
@@ -129,7 +140,7 @@ int main(int argc, char *argv[])
     do
     {
 
-        send_message_example("resources/Point.avsc", myarr, cube_numb_of_pro, count);
+        send_message("resources/Point.avsc", myarr, cube_numb_of_pro, count);
 
         MPI_Barrier(MPI_COMM_WORLD);
         count++;
@@ -138,6 +149,7 @@ int main(int argc, char *argv[])
         *delta = heat_conduct_play(myarr, cube_numb_of_pro, &index_temp_table, myrank);
 
         fill_send_table(send_arr, myarr, cube_numb_of_pro, allrank);
+
         communication(allrank, myrank, cube_numb_of_pro, send_arr, con_arr, MPI_send_element, &index_temp_table);
 
         communicator_get_max_temp_delta(max_delta, delta, MPI_COMM_WORLD, 0);
@@ -155,7 +167,8 @@ int main(int argc, char *argv[])
 
     for (size_t i = 0; i < cube_numb_of_pro; i++)
     {
-        printf("rank[%d], temp:<%f>\n", myrank, myarr[i].temp.tempa);
+        if (myarr[i].temp.index != 0)
+            printf("rank[%d], temp:<%f>\n", myrank, myarr[i].temp.tempa);
     }
 
     MPI_Finalize();

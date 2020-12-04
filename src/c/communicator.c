@@ -1,37 +1,38 @@
 #include "communicator.h"
 
-int *** fill_01_arr(char * pathname)
+int ***fill_01_arr(char *pathname)
 {
     int ***a;
-   char * filepath="/home/dx123/data_fixed02";
-    FILE* fp = fopen(filepath, "r");
-    if (!fp) return 0;
+    char *filepath = "/home/dx123/data_fixed02";
+    FILE *fp = fopen(filepath, "r");
+    if (!fp)
+        return 0;
     fseek(fp, 0L, SEEK_END);
     int size = ftell(fp);
     fclose(fp);
-    int cube_size=(size/4-3)/3;
-    FILE* input = fopen(filepath, "rb");
-    if (input == NULL) {
+    int cube_size = (size / 4 - 3) / 3;
+    FILE *input = fopen(filepath, "rb");
+    if (input == NULL)
+    {
         printf("无法打开文件");
         exit(0);
     }
-    fread(&x_length, sizeof(int), 1/*读取1个数据项*/, input);
-    fread(&y_length, sizeof(int), 1/*读取1个数据项*/, input);
-    fread(&z_length, sizeof(int), 1/*读取1个数据项*/, input);
-    x_length=x_length>> 24;
-    y_length=y_length>> 24;
-    z_length=z_length>> 24;
+    fread(&x_length, sizeof(int), 1 /*读取1个数据项*/, input);
+    fread(&y_length, sizeof(int), 1 /*读取1个数据项*/, input);
+    fread(&z_length, sizeof(int), 1 /*读取1个数据项*/, input);
+    x_length = x_length >> 24;
+    y_length = y_length >> 24;
+    z_length = z_length >> 24;
 
-    a=create_three_dimen_arr(x_length,y_length,z_length);
+    a = create_three_dimen_arr(x_length, y_length, z_length);
     for (int i = 0; i < x_length; i++)
         for (int j = 0; j < y_length; j++)
             for (int k = 0; k < z_length; k++)
-                {
-                    *(*(*(a + i) + j) + k) = 0;
-                }
+            {
+                *(*(*(a + i) + j) + k) = 0;
+            }
 
-                
-    int temp_x, temp_y, temp_z;//临时坐标
+    int temp_x, temp_y, temp_z; //临时坐标
     for (int i = 0; i < cube_size; i++)
     {
         fread(&temp_x, sizeof(int), 1, input);
@@ -40,15 +41,10 @@ int *** fill_01_arr(char * pathname)
         temp_x = temp_x >> 24;
         temp_y = temp_y >> 24;
         temp_z = temp_z >> 24;
-        a[temp_x-1][temp_y-1][temp_z-1] = 1;
-
+        a[temp_x - 1][temp_y - 1][temp_z - 1] = 1;
     }
     return a;
 }
-
-
-
-
 
 process_send_num *communicator_get_process_send_num_list(const arr_cube *arr_cube, const size_t size, const size_t process_size)
 {
@@ -60,15 +56,22 @@ process_send_num *communicator_get_process_send_num_list(const arr_cube *arr_cub
     {
         result[i].process_num = i;
 
-        for (size_t j = 0; j < 6; j++)
-        {
-            result[i].send_num = 0;
-        }
+
+
+        result[i].send_num = 0;
+
+        // for (size_t j = 0; j < 6; j++)
+        // {
+        //     result[i].send_num = 0;
+        // }
     }
 
     //add send num
     for (size_t i = 0; i < size; i++)
     {
+        if(arr_cube[i].temp.index == 0){
+            continue;
+        }
         for (size_t j = 0; j < 6; j++)
         {
 
@@ -253,7 +256,6 @@ int fill_arr(struct cube ***temp, int ***arr)
     }
     return temp_index - 1;
 }
-
 
 //填充二维数组
 struct arr_cube *fill_arr_of_cube(int x, int y, int z, int myrank, int cube_numb_of_pro, struct cube ***temp)
@@ -559,6 +561,10 @@ void fill_send_table(struct send_table_element *send_arr, struct arr_cube *myarr
     int pro_numb; //该方块属于的进程号
     for (int i = 0; i < cube_numb_of_pro; ++i)
     {
+        if(myarr[i].temp.index == 0){
+            continue;
+        }
+        
         for (int j = 0; j < 6; ++j)
         {
             int connect_temp = myarr[i].connect[j]; //某个相邻方块的index
@@ -627,9 +633,13 @@ void communication(int allrank, int myrank, int cube_numb_of_pro, struct send_ta
             for (int i = 0; i < numb; i++)
             {
                 printf("rank[%d], update index[%d] to temp<%f>\n", myrank, recv[i].index, recv[i].tempa);
-                *(double *)HashMap_get(index_temp_table, &recv[i].index) = recv[i].tempa;
+                double *old_value = (double *)HashMap_get(index_temp_table, &recv[i].index);
+                if (old_value != NULL)
+                {
+                    *old_value = recv[i].tempa;
+                }
+                
             }
-
 
             //index-table更新完毕
             // printf("%d\n",numb);

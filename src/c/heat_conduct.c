@@ -63,6 +63,13 @@ double heat_conduct_play(arr_cube *arr_cube, const size_t arr_cube_length, HashM
         double *temp_sum = malloc(sizeof(double));
         *temp_sum = 0;
 
+        //empty cube
+
+        if (arr_cube[i].temp.index == 0)
+        {
+            continue;
+        }
+
         printf("\n[rank: %d],for index:[%d]\n", rank, arr_cube[i].temp.index);
         //sum of connect cube temperature
         for (int j = 0; j < 6; j++)
@@ -88,9 +95,9 @@ double heat_conduct_play(arr_cube *arr_cube, const size_t arr_cube_length, HashM
             }
         }
         printf("\n");
-        printf("[rank: %d],sum:<%f>\n", rank, arr_cube[i].temp.index, *temp_sum);
+        printf("[rank: %d],sum:<%f>\n", rank, *temp_sum);
         *temp_sum = *temp_sum / 6;
-        printf("[rank: %d],averange:<%f>\n", rank, arr_cube[i].temp.index, *temp_sum);
+        printf("[rank: %d],averange:<%f>\n", rank, *temp_sum);
         //printf("%f - %f\n", arr_cube[i].temp.tempa, *temp_sum);
 
         double delta = arr_cube[i].temp.tempa - *temp_sum;
